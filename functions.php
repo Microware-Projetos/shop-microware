@@ -753,6 +753,3 @@ function custom_save_woocommerce_account_fields($user_id) {
     }
 }
 add_action('woocommerce_save_account_details', 'custom_save_woocommerce_account_fields', 10, 1);
-
-
-
