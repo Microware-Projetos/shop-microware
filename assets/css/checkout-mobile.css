@@ -1,0 +1,44 @@
+.checkout-mobile-responsive {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.checkout-column {
+    flex: 1;
+    min-width: 300px;
+}
+
+@media screen and (max-width: 768px) {
+    .checkout-mobile-responsive {
+        flex-direction: column;
+    }
+    
+    .checkout-column {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    #order_review_heading {
+        margin-top: 30px;
+    }
+    
+    .woocommerce-checkout-review-order {
+        margin-top: 20px;
+    }
+    
+    /* Melhorar espaçamento dos campos do formulário */
+    .woocommerce-billing-fields__field-wrapper,
+    .woocommerce-shipping-fields__field-wrapper {
+        margin-bottom: 15px;
+    }
+    
+    /* Aumentar tamanho dos inputs para melhor toque */
+    .woocommerce-checkout input[type="text"],
+    .woocommerce-checkout input[type="tel"],
+    .woocommerce-checkout input[type="email"],
+    .woocommerce-checkout select {
+        height: 44px;
+        font-size: 16px;
+    }
+} 

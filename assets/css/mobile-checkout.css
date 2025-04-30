@@ -1,0 +1,86 @@
+/* Estilos para o formulário de checkout em dispositivos móveis */
+@media screen and (max-width: 768px) {
+    .mobile-optimized {
+        padding: 15px;
+    }
+
+    .checkout-section-title {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .mobile-form-wrapper {
+        margin-bottom: 20px;
+    }
+
+    .mobile-form-field {
+        margin-bottom: 15px;
+    }
+
+    .mobile-form-field input[type="text"],
+    .mobile-form-field input[type="email"],
+    .mobile-form-field input[type="tel"],
+    .mobile-form-field input[type="password"],
+    .mobile-form-field select {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+    .mobile-form-field label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .mobile-checkbox {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+    }
+
+    .mobile-input-checkbox {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+
+    .mobile-checkbox-text {
+        font-size: 14px;
+        color: #333;
+    }
+
+    .mobile-account-fields {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .mobile-account-form {
+        margin-top: 15px;
+    }
+
+    /* Ajustes para campos de endereço */
+    .mobile-form-field .woocommerce-input-wrapper {
+        width: 100%;
+    }
+
+    /* Melhorias para botões */
+    .mobile-form-field .button {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    /* Espaçamento entre seções */
+    .woocommerce-billing-fields,
+    .woocommerce-account-fields {
+        margin-bottom: 30px;
+    }
+} 
