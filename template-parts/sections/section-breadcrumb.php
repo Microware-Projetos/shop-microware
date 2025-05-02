@@ -5,7 +5,8 @@
 		
 if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() && !is_checkout() ) {	
         ?>
-<section id="breadcrumb-section" class="custom-shop-header" style="padding: 40px 0;">
+<section id="breadcrumb-section" class="custom-shop-header" style="padding: 20px 0; margin-bottom: 0;">
+
     <div class="container">
         <div class="row d-flex align-items-stretch">
 
@@ -66,9 +67,6 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
 
 <style>
 @media (max-width: 767px) {
-    .custom-shop-header {
-        padding: 20px 0 !important;
-    }
     
     .shop-categories-box {
         background: #f8f9fa;

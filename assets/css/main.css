@@ -598,7 +598,7 @@ input[type="reset"]:focus {
 }
 
 .st-py-default {
-    padding: 80px 0;
+    padding: 20px 0;
 }
 .st-pt-default {
     padding-top: 80px;
@@ -7883,4 +7883,22 @@ ul.deals-product-gallery-images li img {
 .cart_sidebar_enable .xoo-wsc-basket,
 .cart_sidebar_disable .xoo-wsc-basket {
     display: none !important;
+}
+
+@media (max-width: 768px) {
+    .woocommerce ul.products.columns-4 li.product,
+    .woocommerce-page ul.products.columns-4 li.product {
+        width: 48%;
+        float: left;
+        margin-right: 4%;
+    }
+
+    .woocommerce ul.products.columns-4 li.product:nth-child(2n),
+    .woocommerce-page ul.products.columns-4 li.product:nth-child(2n) {
+        margin-right: 0;
+    }
+}
+
+.page-title {
+    display: none;
 }
