@@ -97,3 +97,57 @@ do_action( 'woocommerce_before_edit_account_form' );
 </div>
 
 <?php do_action( 'woocommerce_after_edit_account_form' ); ?>
+
+<style>
+/* Responsividade para o formulário de edição de conta WooCommerce */
+@media (max-width: 600px) {
+  .account-edit-form-wrapper {
+    padding: 10px;
+  }
+
+  .woocommerce-EditAccountForm .form-row-group {
+    display: block;
+  }
+
+  .woocommerce-EditAccountForm .form-row {
+    width: 100% !important;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .woocommerce-EditAccountForm .form-label {
+    font-size: 1rem;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .woocommerce-EditAccountForm .input-text,
+  .woocommerce-EditAccountForm input[type="email"],
+  .woocommerce-EditAccountForm input[type="password"] {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .woocommerce-EditAccountForm .form-actions {
+    text-align: center;
+  }
+
+  .woocommerce-EditAccountForm .woocommerce-Button {
+    width: 100%;
+    padding: 14px 0;
+    font-size: 1.1rem;
+  }
+
+  .woocommerce-EditAccountForm .form-description {
+    font-size: 0.95rem;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .password-change-section {
+    margin-top: 24px;
+  }
+}
+</style>

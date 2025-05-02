@@ -34,3 +34,37 @@ do_action( 'woocommerce_account_navigation' ); ?>
 		do_action( 'woocommerce_account_content' );
 	?>
 </div>
+
+<style>
+
+@media (max-width: 768px) {
+  .woocommerce-account .woocommerce-MyAccount-navigation {
+    width: 100%;
+    float: none;
+    margin-bottom: 20px;
+  }
+  .woocommerce-account .woocommerce-MyAccount-content {
+    width: 100%;
+    float: none;
+    padding: 0;
+  }
+  .woocommerce-MyAccount-navigation ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0;
+  }
+  .woocommerce-MyAccount-navigation ul li {
+    flex: 1 1 45%;
+    margin: 0;
+    text-align: center;
+  }
+  .woocommerce-MyAccount-navigation ul li a {
+    display: block;
+    padding: 10px;
+    background: #f7f7f7;
+    border-radius: 5px;
+    color: #333;
+  }
+}
+	</style>

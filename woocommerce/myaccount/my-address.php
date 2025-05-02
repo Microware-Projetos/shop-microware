@@ -46,13 +46,15 @@ if ( ! wc_ship_to_billing_address_only() && wc_shipping_enabled() ) {
 
     <?php if ( ! wc_ship_to_billing_address_only() && wc_shipping_enabled() ) : ?>
         <div class="row g-4">
+    <?php else: ?>
+        <div class="row g-4">
     <?php endif; ?>
 
     <?php foreach ( $get_addresses as $name => $address_title ) : ?>
         <?php $address = wc_get_account_formatted_address( $name ); ?>
         
-        <div class="<?php echo ! wc_ship_to_billing_address_only() && wc_shipping_enabled() ? 'col-md-6' : 'col-12'; ?>">
-            <div class="card h-100">
+        <div class="col-12 col-md-6">
+            <div class="card h-100 mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h2 class="h5 mb-0"><?php echo esc_html( $address_title ); ?></h2>
                     <a href="<?php echo esc_url( wc_get_endpoint_url( 'edit-address', $name ) ); ?>" class="btn btn-sm btn-outline-primary">
@@ -77,7 +79,26 @@ if ( ! wc_ship_to_billing_address_only() && wc_shipping_enabled() ) {
 
     <?php endforeach; ?>
 
-    <?php if ( ! wc_ship_to_billing_address_only() && wc_shipping_enabled() ) : ?>
-        </div>
-    <?php endif; ?>
+    </div>
 </div>
+
+<style>
+/* Melhorias para o cabeçalho do card de endereço no mobile */
+@media (max-width: 767.98px) {
+  .woocommerce-addresses-wrapper .card-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+  }
+  .woocommerce-addresses-wrapper .card-header .btn {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  .woocommerce-addresses-wrapper .card-header h2 {
+    width: 100%;
+    margin-bottom: 0;
+  }
+}
+</style>

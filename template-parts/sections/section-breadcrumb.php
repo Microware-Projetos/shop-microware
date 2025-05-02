@@ -160,13 +160,31 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         display: none;
     }
     .shop-categories-list {
-        display: inline-block;
-        width: auto;
+        display: block;
+        width: 100%;
         min-width: 0;
         padding: 0;
     }
     .shop-categories-list li {
-        white-space: nowrap;
+        white-space: normal;
+        word-break: break-word;
+        line-height: 1.5;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: background 0.2s;
+        margin-bottom: 4px;
+    }
+    .shop-categories-list li:last-child {
+        margin-bottom: 0;
+    }
+    .shop-categories-list li a {
+        color: #222;
+        text-decoration: none;
+        display: block;
+        width: 100%;
+    }
+    .shop-categories-list li:hover {
+        background: #f2f2f2;
     }
     .shop-categories-box {
         display: inline-block;
