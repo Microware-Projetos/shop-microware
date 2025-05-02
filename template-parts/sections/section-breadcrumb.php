@@ -188,8 +188,9 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     }
     .shop-categories-box {
         display: inline-block;
-        width: auto;
-        min-width: 0;
+        width: 300px;
+        min-width: 300px;
+        max-width: 300px;
     }
     .shop-categories-box,
     .shop-categories-list {

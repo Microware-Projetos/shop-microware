@@ -753,3 +753,11 @@ function custom_save_woocommerce_account_fields($user_id) {
     }
 }
 add_action('woocommerce_save_account_details', 'custom_save_woocommerce_account_fields', 10, 1);
+
+function custom_login_message_translation($translated_text, $text, $domain) {
+    if ($text === 'Your account with %s is using a temporary password. We emailed you a link to change your password.') {
+        $translated_text = 'Sua conta com %s está usando uma senha temporária. Enviamos um link para você alterá-la.';
+    }
+    return $translated_text;
+}
+add_filter('gettext', 'custom_login_message_translation', 20, 3);

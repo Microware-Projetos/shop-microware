@@ -24,7 +24,7 @@ echo $email_improvements_enabled ? '<div class="email-introduction">' : '';
 
 $text = __( 'Você recebeu o seguinte pedido de %s:', 'woocommerce' );
 if ( $email_improvements_enabled ) {
-	$text = __( 'Uhuu! Você recebeu um novo pedido de %s:', 'woocommerce' );
+	$text = __( 'Você recebeu um novo pedido de %s:', 'woocommerce' );
 }
 ?>
 <p><?php printf( esc_html( $text ), esc_html( $order->get_formatted_billing_full_name() ) ); ?></p>
