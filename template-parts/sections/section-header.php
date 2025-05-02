@@ -1,119 +1,409 @@
-<?php 
-if ( get_header_image() ) : ?>
-	<a href="<?php echo esc_url( home_url( '/' ) ); ?>" id="custom-header" rel="home">
-		<img src="<?php esc_url(header_image()); ?>" width="<?php echo esc_attr( get_custom_header()->width ); ?>" height="<?php echo esc_attr( get_custom_header()->height ); ?>" alt="<?php echo esc_attr(get_bloginfo( 'title' )); ?>">
-	</a>	
-<?php endif; 
-$storebiz_hs_nav_search		=	get_theme_mod('hs_nav_search','1');
-$storebiz_hs_nav_account	=	get_theme_mod('hs_nav_account','1');
+<?php
+$storebiz_hs_nav_search  = get_theme_mod('hs_nav_search','1');
+$storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
+$storebiz_show_cart      = get_theme_mod('hide_show_cart','1');
 ?>
-<header id="main-header" class="main-header">
-	<div class="navigation-middle">
-		<div class="container">
-			<div class="row navigation-middle-row">
-			<div class="col-lg-3 col-12 d-flex flex-column align-items-center justify-content-center text-center my-3 my-lg-0">
-				<div class="logo">
-					<?php 
-					if(has_custom_logo()) {	
-						the_custom_logo();
-					} else { 
-						?>
-						<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-							<h4 class="site-title mb-0">
-								<?php echo esc_html(bloginfo('name')); ?>
-							</h4>
-						</a>	
-						<?php 						
-					} ?>
 
-					<?php
-					$storebiz_site_desc = get_bloginfo( 'description');
-					if ($storebiz_site_desc) : ?>
-						<p class="site-description mb-0"><?php echo esc_html($storebiz_site_desc); ?></p>
-					<?php endif; ?>
-				</div>
-			</div>
+<header id="site-header" class="site-header bg-light border-bottom py-2">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
 
-				<div class="col-lg-6 col-12 text-center my-auto mb-lg-auto mb-2">
-					<?php if (class_exists('WooCommerce') && ($storebiz_hs_nav_search =='1') ) { ?>
-						<div class="header-search-form">
-							<form method="get" action="<?php echo esc_url(home_url('/')); ?>">
-								<input type="hidden" name="post_type" value="product" />
-								<input class="header-search-input" name="s" type="text" placeholder="<?php esc_attr_e('Find Your products...', 'storebiz'); ?>"/>
-								<button class="header-search-button" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-							</form>
-						</div>
-					<?php } ?>
-				</div>
-				<div class="col-lg-3 col-12 text-lg-right text-center my-auto mb-lg-auto mb-2">
-					<div class="main-menu-right">
-						<ul class="menu-right-list">
-							<?php 
-							if ( class_exists( 'WooCommerce' ) ) { 
-								if($storebiz_hs_nav_account =='1') { ?>
-									<li class="user">
-										<a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" class="user-btn"><svg xmlns="http://www.w3.org/2000/svg" width="22.69" height="25.594"><path d="M22.68 23.327a12.112 12.112 0 00-.96-4.589 11.635 11.635 0 00-6.6-6.374 7.048 7.048 0 001.15-10.083 6.406 6.406 0 00-9.12-.736 6.525 6.525 0 00-2.31 4.453 6.943 6.943 0 002.75 6.359 11.718 11.718 0 00-5.5 4.327 12.014 12.014 0 00-2.08 6.643v1.026a1.217 1.217 0 001.19 1.233h20.06a1.452 1.452 0 001.42-1.476v-.783zM6.57 6.787a4.773 4.773 0 114.77 4.931 4.843 4.843 0 01-4.77-4.931zM4.29 16.804a9.176 9.176 0 016.19-3.192 8.932 8.932 0 016.15 1.622 9.953 9.953 0 014.29 8.093H1.78a10 10 0 012.51-6.523z" fill-rule="evenodd"/></svg></a>
-									</li>
-								<?php } ?>
-								<?php
-								$storebiz_hide_show_cart       = get_theme_mod( 'hide_show_cart','1'); 
-								if($storebiz_hide_show_cart == '1') { ?>
-									<li class="cart-wrapper">
-										<div class="cart-main">
-											<button type="button" class="cart-icon-wrap header-cart">
-												<svg xmlns="http://www.w3.org/2000/svg" width="26" height="25"><path data-name="Cart Icon" d="M20.04 18.422h-9.55m-1.12-.024c-.45 0-.76.009-1.08 0a2.246 2.246 0 01-2.06-1.526 2.213 2.213 0 01.79-2.593.669.669 0 00.31-.855C6.45 9.497 5.59 5.566 4.72 1.56H2.3c-.51 0-1.01.024-1.51-.011A.752.752 0 010 .778.721.721 0 01.78.012c1.49-.019 2.98-.013 4.47 0a.814.814 0 01.84.74c.16.76.34 1.516.52 2.327h18.07c.18 0 .35-.01.52.006a.777.777 0 01.76 1.048c-.99 3.517-2 7.031-3 10.545a.962.962 0 01-1.13.676q-6.465-.013-12.95 0c-.19 0-.39 0-.58.014a.675.675 0 00-.66.685.7.7 0 00.6.8 3.061 3.061 0 00.63.031H22.06a.8.8 0 01.89.78.779.779 0 01-.88.741h-.91m-12.18-4.61c.15.015.23.03.3.03 3.97 0 7.93 0 11.9.012a.518.518 0 00.58-.481c.63-2.284 1.29-4.563 1.93-6.845.18-.611.35-1.222.53-1.865H6.96c.67 3.054 1.34 6.086 2.02 9.145zm11.16 6.2c1.49.7 2.05 1.693 1.81 3.011a2.336 2.336 0 01-2.21 1.987 2.39 2.39 0 01-2.41-1.827c-.34-1.253.19-2.285 1.64-3.149m-8.98 0c1.45.752 1.98 1.741 1.69 3.07a2.356 2.356 0 01-2.34 1.914 2.423 2.423 0 01-2.29-1.91c-.29-1.228.29-2.32 1.77-3.1m.5 3.318a.81.81 0 00.06-1.618.78.78 0 00-.78.853.73.73 0 00.72.765zm11.07-.761a.74.74 0 00-.75-.847.726.726 0 00-.78.769.752.752 0 00.78.836.717.717 0 00.75-.758z" fill-rule="evenodd"/></svg>
-												<?php 
-												if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-													$storebiz_product_count = WC()->cart->cart_contents_count;
-													$storebiz_cart_url = wc_get_cart_url();
+            <!-- Logo -->
+            <div class="site-branding ms-4">
+                <?php if (has_custom_logo()) : ?>
+                    <?php 
+                    $custom_logo_id = get_theme_mod('custom_logo');
+                    $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                    ?>
+                    <a href="<?php echo esc_url(home_url('/')); ?>">
+                        <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo" style="max-height: 50px; width: auto;">
+                    </a>
+                <?php else : ?>
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
+                        <?php bloginfo('name'); ?>
+                    </a>
+                <?php endif; ?>
+            </div>
 
-													if ( $storebiz_product_count > 0 ) {
-														?>
-														<span><?php echo esc_html( $storebiz_product_count ); ?></span>
-														<?php 
-													}
-													else {
-														?>
-														<span><?php esc_html_e('0','storebiz'); ?></span>
-														<?php 
-													}
-												}
-												?>
-											</button>
-											<span class="cart-label">
-												<?php 
-												if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-													$storebiz_product_count = WC()->cart->cart_contents_count;
-													$storebiz_cart_url = wc_get_cart_url();
+            <!-- Mobile menu toggle -->
+            <button class="navbar-toggler d-lg-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#main-menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-													if ( $storebiz_product_count > 0 ) {
-														?>
-														<span><?php echo WC()->cart->get_cart_subtotal(); ?></span>
-														<?php 
-													}
-													else {
-														?>
-														<span><?php esc_html_e('0','storebiz'); ?></span>
-														<?php 
-													}
-												}
-												?>
-											</span>
-										</div>
-										<div class="shopping-cart">
-											<ul class="shopping-cart-items">
-												<?php get_template_part('woocommerce/cart/mini','cart'); ?>
-											</ul>
-										</div>
-									</li>
-								<?php } } ?>
-							</ul>                            
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+            <!-- Search -->
+            <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_search == '1') : ?>
+                <form class="d-none d-lg-block search-form" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+                    <input type="hidden" name="post_type" value="product" />
+                    <div class="input-group">
+                        <input type="text" class="form-control rounded-start" name="s" placeholder="<?php esc_attr_e('Buscar produtos...', 'storebiz'); ?>">
+                        <button class="btn btn-primary rounded-end" type="submit" tabindex="-1">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            <?php endif; ?>
 
-			
-		</div>
-	</header>
+            <!-- Icons -->
+            <div class="d-flex align-items-center gap-7 header-icons-gap">
+                <!-- Conta -->
+                <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
+                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="text-dark">
+                        <i class="fa fa-user fa-lg"></i>
+                    </a>
+                <?php endif; ?>
+
+                <!-- Carrinho -->
+                <?php if (class_exists('WooCommerce') && $storebiz_show_cart == '1') : ?>
+                    <div class="cart-wrapper position-relative">
+                        <a href="<?php echo wc_get_cart_url(); ?>" class="text-dark position-relative">
+                            <i class="fa fa-shopping-cart fa-lg"></i>
+                            <?php $count = WC()->cart->get_cart_contents_count(); ?>
+                            <?php if ($count > 0) : ?>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    <?php echo esc_html($count); ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+                        <div class="mini-cart-dropdown">
+                            <div class="widget_shopping_cart_content">
+                                <?php woocommerce_mini_cart(); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="collapse navbar-collapse mt-3" id="main-menu">
+            <?php
+            wp_nav_menu(array(
+                'theme_location' => 'primary',
+                'container'      => false,
+                'menu_class'     => 'navbar-nav',
+                'fallback_cb'    => '__return_false',
+                'depth'          => 2,
+                'walker'         => new WP_Bootstrap_Navwalker(),
+            ));
+            ?>
+
+            <!-- Search mobile -->
+            <?php if ($storebiz_hs_nav_search == '1') : ?>
+                <form class="mt-3" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+                    <input type="hidden" name="post_type" value="product" />
+                    <div class="input-group">
+                        <input type="text" class="form-control rounded-start" name="s" placeholder="<?php esc_attr_e('Buscar produtos...', 'storebiz'); ?>">
+                        <button class="btn btn-primary rounded-end" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            <?php endif; ?>
+        </div>
+    </div>
+</header>
+
+<style>
+/* Estilos para o header */
+.site-header {
+    position: relative;
+    z-index: 1000;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+}
+
+.custom-logo {
+    max-height: 60px;
+    width: auto;
+}
+
+.search-form {
+    width: 40%;
+    max-width: 500px;
+}
+
+.search-form .input-group {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+.search-form .form-control {
+    height: 48px;
+    line-height: 48px;
+    font-size: 1.1rem;
+    box-sizing: border-box;
+    border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.search-form .btn {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0.5rem 0.5rem 0;
+    font-size: 1.1rem;
+    box-sizing: border-box;
+    border-left: 0;
+}
+
+.search-form .btn i {
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* Mini carrinho */
+.cart-wrapper {
+    position: relative;
+}
+
+.mini-cart-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    width: 320px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 0;
+    z-index: 1000;
+    margin-top: 10px;
+}
+
+.cart-wrapper:hover .mini-cart-dropdown {
+    display: block;
+}
+
+.mini-cart-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 20px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    transform: rotate(45deg);
+    border-left: 1px solid #e0e0e0;
+    border-top: 1px solid #e0e0e0;
+}
+
+.widget_shopping_cart_content {
+    padding: 15px;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart li:last-child {
+    border-bottom: none;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f8f9fa;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .remove_from_cart_button {
+    color: #dc3545;
+    font-size: 18px;
+    padding: 0 5px;
+    text-decoration: none;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .remove_from_cart_button:hover {
+    color: #c82333;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .quantity {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .total {
+    margin: 15px 0;
+    padding: 15px 0;
+    border-top: 1px solid #f0f0f0;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .buttons a {
+    flex: 1;
+    text-align: center;
+    padding: 8px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .buttons .checkout {
+    background: #28a745;
+    color: white;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .buttons .checkout:hover {
+    background: #218838;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .buttons .view_cart {
+    background: #f8f9fa;
+    color: #212529;
+    border: 1px solid #dee2e6;
+}
+
+.widget_shopping_cart_content .woocommerce-mini-cart .buttons .view_cart:hover {
+    background: #e9ecef;
+}
+
+/* Mobile adjustments */
+@media (max-width: 991px) {
+    .search-form {
+        width: 100%;
+    }
+    
+    .navbar-toggler {
+        padding: 0.25rem 0.5rem;
+    }
+    
+    #main-menu {
+        background: #fff;
+        padding: 1rem;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .navbar-nav {
+        margin-bottom: 1rem;
+    }
+
+    .mini-cart-dropdown {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        max-height: 80vh;
+        overflow-y: auto;
+        padding-top: 0 !important;
+    }
+
+    .mini-cart-dropdown::before {
+        display: none;
+    }
+
+    .site-branding {
+        margin-left: 0 !important;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    .header-icons-gap {
+        justify-content: center !important;
+        width: 100%;
+        gap: 1rem !important;
+    }
+
+    .widget_shopping_cart_content .woocommerce-mini-cart li {
+        display: block;
+        padding: 10px 0;
+    }
+    .widget_shopping_cart_content .woocommerce-mini-cart img {
+        display: none !important;
+    }
+    .widget_shopping_cart_content .woocommerce-mini-cart .mini_cart_item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+    }
+    .widget_shopping_cart_content .woocommerce-mini-cart .mini_cart_item .product-name {
+        font-weight: bold;
+        font-size: 1rem;
+        margin-bottom: 2px;
+    }
+    .widget_shopping_cart_content .woocommerce-mini-cart .mini_cart_item .quantity,
+    .widget_shopping_cart_content .woocommerce-mini-cart .mini_cart_item .woocommerce-Price-amount {
+        font-size: 0.95em;
+        color: #666;
+        margin-right: 0.5em;
+    }
+    .widget_shopping_cart_content .woocommerce-mini-cart .mini_cart_item .quantity {
+        margin-bottom: 0.1em;
+    }
+}
+
+.site-branding {
+    /* Espaço extra à esquerda do logo */
+    margin-left: 6rem;
+}
+
+.header-icons-gap > * {
+    margin-right: 1.2rem !important;
+}
+.header-icons-gap > *:last-child {
+    margin-right: 0 !important;
+}
+</style>
+
+<script>
+jQuery(document).ready(function($) {
+    // Atualizar mini carrinho via AJAX
+    $(document.body).on('added_to_cart removed_from_cart', function() {
+        $('.widget_shopping_cart_content').load(window.wc_cart_fragments_params.wc_ajax_url.toString().replace('%%endpoint%%', 'get_refreshed_fragments'));
+    });
+
+    // Impedir redirecionamento ao clicar no ícone do carrinho no mobile
+    function isMobile() {
+        return window.innerWidth <= 991;
+    }
+    $('.cart-wrapper > a').on('click', function(e) {
+        if (isMobile()) {
+            e.preventDefault();
+            // Força a abertura do mini-cart
+            $(this).siblings('.mini-cart-dropdown').toggle();
+        }
+    });
+    // Fecha o mini-cart ao clicar fora no mobile
+    $(document).on('click touchstart', function(e) {
+        if (isMobile()) {
+            if (!$(e.target).closest('.cart-wrapper').length) {
+                $('.mini-cart-dropdown').hide();
+            }
+        }
+    });
+});
+</script>

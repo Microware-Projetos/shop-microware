@@ -7902,3 +7902,135 @@ ul.deals-product-gallery-images li img {
 .page-title {
     display: none;
 }
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1000;
+}
+
+.hamburger-box {
+    width: 30px;
+    height: 24px;
+    display: inline-block;
+    position: relative;
+}
+
+.hamburger-inner {
+    display: block;
+    top: 50%;
+    margin-top: -2px;
+}
+
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+    width: 30px;
+    height: 3px;
+    background-color: #333;
+    border-radius: 3px;
+    position: absolute;
+    transition: transform 0.15s ease;
+}
+
+.hamburger-inner::before,
+.hamburger-inner::after {
+    content: "";
+    display: block;
+}
+
+.hamburger-inner::before {
+    top: -10px;
+}
+
+.hamburger-inner::after {
+    bottom: -10px;
+}
+
+.primary-menu-container {
+    display: flex;
+    justify-content: center;
+}
+
+.primary-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.primary-menu li {
+    position: relative;
+    margin: 0 15px;
+}
+
+.primary-menu a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 0;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.primary-menu a:hover {
+    color: #007bff;
+}
+
+/* Estilos para Mobile */
+@media (max-width: 991px) {
+    .menu-toggle {
+        display: block;
+    }
+
+    .primary-menu-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        z-index: 999;
+        padding: 80px 20px 20px;
+    }
+
+    .primary-menu-container.active {
+        display: block;
+    }
+
+    .primary-menu {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .primary-menu li {
+        margin: 10px 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .primary-menu a {
+        font-size: 18px;
+        padding: 15px 0;
+    }
+
+    /* Animação do hambúrguer */
+    .menu-toggle.active .hamburger-inner {
+        transform: rotate(45deg);
+    }
+
+    .menu-toggle.active .hamburger-inner::before {
+        transform: rotate(90deg);
+        top: 0;
+    }
+
+    .menu-toggle.active .hamburger-inner::after {
+        transform: rotate(90deg);
+        bottom: 0;
+    }
+}

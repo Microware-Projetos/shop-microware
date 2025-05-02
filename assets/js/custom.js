@@ -1205,5 +1205,20 @@ $( document ).ready(function() {
     $('[id*="newsOffer"]').breakingNews();
   });
 
+    // Mobile Search Toggle
+    $(document).ready(function() {
+        $('.search-toggle-btn').on('click', function(e) {
+            e.preventDefault();
+            $('.mobile-search-form').slideToggle();
+        });
+
+        // Close search when clicking outside
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.mobile-search-toggle').length) {
+                $('.mobile-search-form').slideUp();
+            }
+        });
+    });
+
 }(jQuery));
 

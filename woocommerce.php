@@ -9,7 +9,7 @@
 
 get_header();
 ?>
-<section id="product" class="product-section st-py-default">
+<section id="product" class="product-section">
         <div class="container">
             <div class="row gy-lg-0 gy-5 wow fadeInUp">
 			<?php if ( ! is_active_sidebar( 'storebiz-woocommerce-sidebar' ) ) { ?>
