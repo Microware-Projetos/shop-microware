@@ -531,8 +531,8 @@ function storebiz_customize_register_banners($wp_customize) {
     ));
  
     for ($i = 1; $i <= 10; $i++) {
+        // Configuração da imagem do banner
         $setting_id = 'custom_shop_banner_' . $i;
- 
         $wp_customize->add_setting($setting_id, array(
             'default' => '',
             'sanitize_callback' => 'esc_url_raw',
@@ -543,10 +543,55 @@ function storebiz_customize_register_banners($wp_customize) {
             'section'  => 'custom_shop_section',
             'settings' => $setting_id,
         )));
+
+        // Configuração do link do banner
+        $link_setting_id = 'custom_shop_banner_link_' . $i;
+        $wp_customize->add_setting($link_setting_id, array(
+            'default' => '',
+            'sanitize_callback' => 'esc_url_raw',
+        ));
+ 
+        $wp_customize->add_control($link_setting_id, array(
+            'label'    => __('Link do Banner ' . $i, 'storebiz'),
+            'section'  => 'custom_shop_section',
+            'type'     => 'url',
+            'settings' => $link_setting_id,
+        ));
     }
 }
 add_action('customize_register', 'storebiz_customize_register_banners');
- 
+
+// Função para exibir o slider com links
+function storebiz_display_banner_slider() {
+    ?>
+    <div class="shop-banner-slider swiper">
+        <div class="swiper-wrapper">
+            <?php
+            for ($i = 1; $i <= 10; $i++) {
+                $banner_url = get_theme_mod('custom_shop_banner_' . $i);
+                $banner_link = get_theme_mod('custom_shop_banner_link_' . $i);
+                
+                if (!empty($banner_url)) {
+                    echo '<div class="swiper-slide">';
+                    if (!empty($banner_link)) {
+                        echo '<a href="' . esc_url($banner_link) . '" target="_blank">';
+                    }
+                    echo '<img src="' . esc_url($banner_url) . '" alt="Banner ' . $i . '">';
+                    if (!empty($banner_link)) {
+                        echo '</a>';
+                    }
+                    echo '</div>';
+                }
+            }
+            ?>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+    <?php
+}
+
 function storebiz_load_swiper_assets() {
     wp_enqueue_style('swiper-css', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css');
     wp_enqueue_script('swiper-js', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), null, true);
@@ -563,7 +608,8 @@ function storebiz_load_swiper_assets() {
                 prevEl: '.swiper-button-prev'
             },
             autoplay: {
-                delay: 5000
+                delay: 5000,
+                disableOnInteraction: false
             }
         });
     ");
@@ -939,3 +985,110 @@ function custom_ship_to_different_address_checked($checked) {
     }
     return $checked;
 }
+
+add_action('wp_footer', 'customizar_mensagem_input_quantidade');
+function customizar_mensagem_input_quantidade() {
+    if (is_product() || is_cart()) {
+        ?>
+        <style>
+        #microware-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        #microware-modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            font-family: Arial, sans-serif;
+        }
+
+        #microware-modal-close {
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #microware-modal-content p {
+            margin-top: 1em;
+        }
+
+        #copy-email {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #610B7A;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        </style>
+
+        <div id="microware-modal">
+            <div id="microware-modal-content">
+                <span id="microware-modal-close">&times;</span>
+                <p><strong>Prezado(a) cliente,</strong></p>
+                <p>Identificamos uma tentativa de adição de mais de 10 unidades do produto ao seu carrinho.</p>
+                <p>Para garantir a melhor experiência e confirmar a disponibilidade, pedimos que entre em contato conosco pelo e-mail:</p>
+                <p><strong id="email-text">vendas.online@microware.com.br</strong></p>
+                <button id="copy-email">Copiar e-mail</button>
+                <p style="margin-top:1em;">Agradecemos pela compreensão.<br>Atenciosamente, Equipe Microware.</p>
+            </div>
+        </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('microware-modal');
+            const closeBtn = document.getElementById('microware-modal-close');
+            const copyBtn = document.getElementById('copy-email');
+            const emailText = document.getElementById('email-text');
+
+            document.querySelectorAll('input.qty').forEach(function (input) {
+                input.addEventListener('invalid', function (event) {
+                    if (input.validity.rangeOverflow) {
+                        input.setCustomValidity("Máximo de 10 unidades por pedido.");
+                        modal.style.display = 'block';
+                    } else {
+                        input.setCustomValidity("");
+                    }
+                });
+
+                input.addEventListener('input', function () {
+                    input.setCustomValidity("");
+                });
+            });
+
+            closeBtn.onclick = function () {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            copyBtn.onclick = function () {
+                navigator.clipboard.writeText(emailText.textContent).then(function () {
+                    copyBtn.textContent = "E-mail copiado!";
+                    setTimeout(() => copyBtn.textContent = "Copiar e-mail", 2000);
+                });
+            }
+        });
+        </script>
+        <?php
+    }
+}
+

@@ -86,8 +86,18 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
                             <?php 
                             for ($i = 1; $i <= 10; $i++) {
                                 $banner = get_theme_mod('custom_shop_banner_' . $i);
+                                $banner_link = get_theme_mod('custom_shop_banner_link_' . $i);
+                                
                                 if (!empty($banner)) {
-                                    echo '<div class="swiper-slide"><img src="' . esc_url($banner) . '" class="img-fluid w-100" alt="Banner"></div>';
+                                    echo '<div class="swiper-slide">';
+                                    if (!empty($banner_link)) {
+                                        echo '<a href="' . esc_url($banner_link) . '" target="_blank">';
+                                    }
+                                    echo '<img src="' . esc_url($banner) . '" class="img-fluid w-100" alt="Banner">';
+                                    if (!empty($banner_link)) {
+                                        echo '</a>';
+                                    }
+                                    echo '</div>';
                                 }
                             }
                             ?>
@@ -260,8 +270,10 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     .shop-categories-box {
         display: block;
         width: 100%;
-        margin-bottom: 20px;
-        height: auto;
+        margin-bottom: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
     
     .shop-categories-list {
@@ -269,19 +281,20 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         width: 100%;
         padding: 0;
         margin: 0;
-        height: auto;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
     
     .shop-categories-list li {
         white-space: normal;
         word-break: break-word;
         line-height: 1.3;
-        padding: 6px 10px;
+        padding: 8px 12px;
         border-radius: 6px;
         transition: background 0.2s;
-        margin-bottom: 2px;
+        margin-bottom: 4px;
         list-style: none;
-        height: auto;
     }
     
     .shop-categories-list li:last-child {
@@ -302,7 +315,7 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     }
     
     .category-title {
-        margin-bottom: 12px;
+        margin-bottom: 15px;
         font-size: 16px;
         font-weight: 600;
         line-height: 1.2;
@@ -313,7 +326,7 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         flex-wrap: wrap;
         margin-right: -15px;
         margin-left: -15px;
-        align-items: flex-start;
+        align-items: stretch;
     }
     
     .col-md-3 {
@@ -321,7 +334,8 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         max-width: 25%;
         padding-right: 15px;
         padding-left: 15px;
-        height: auto;
+        display: flex;
+        flex-direction: column;
     }
     
     .col-md-9 {
@@ -329,6 +343,27 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         max-width: 75%;
         padding-right: 15px; 
         padding-left: 15px;
+    }
+
+    .shop-banner-box {
+        height: 100%;
+    }
+
+    .shop-banner-slider {
+        height: 100%;
+    }
+
+    .swiper-wrapper {
+        height: 100%;
+    }
+
+    .swiper-slide {
+        height: 100%;
+    }
+
+    .swiper-slide img {
+        height: 100%;
+        object-fit: cover;
     }
 }
 
