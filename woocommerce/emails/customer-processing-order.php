@@ -21,6 +21,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Função para obter a imagem do produto (externa ou padrão)
+function get_product_image_for_email($product) {
+    $external_image = get_post_meta($product->get_id(), '_external_image_url', true);
+    
+    if ($external_image) {
+        return '<img src="' . esc_url($external_image) . '" style="width: 100px; height: auto; margin-right: 10px;" />';
+    }
+    
+    // Se não houver imagem externa, usa a imagem padrão do WooCommerce
+    return $product->get_image('thumbnail');
+}
+
 $email_improvements_enabled = FeaturesUtil::feature_is_enabled( 'email_improvements' );
 
 /*
@@ -39,13 +51,15 @@ if ( ! empty( $order->get_billing_first_name() ) ) {
 }
 ?>
 </p>
-<?php if ( $email_improvements_enabled ) : ?>
-	<p><?php esc_html_e( 'Recebemos seu pedido e avisaremos quando estiver a caminho!', 'woocommerce' ); ?></p>
-	<p><?php esc_html_e( 'Aqui está um lembrete do que você pediu:', 'woocommerce' ); ?></p>
-<?php else : ?>
-	<?php /* translators: %s: Order number */ ?>
-	<p><?php printf( esc_html__( 'Só para informar &mdash; recebemos seu pedido #%s, e ele está sendo processado:', 'woocommerce' ), esc_html( $order->get_order_number() ) ); ?></p>
-<?php endif; ?>
+
+<p><?php esc_html_e( 'Obrigado pelo seu pedido na loja Microware!', 'woocommerce' ); ?></p>
+
+<p><?php esc_html_e( 'Recebemos seu pedido e ele está atualmente em espera até que possamos confirmar que seu pagamento foi processado.', 'woocommerce' ); ?></p>
+
+<p><?php esc_html_e( 'Assim que a sua encomenda for enviada você irá receber um código para que possa acompanhar seu pedido.', 'woocommerce' ); ?></p>
+
+<p><?php esc_html_e( 'Aqui está um lembrete do que você pediu:', 'woocommerce' ); ?></p>
+
 <?php echo $email_improvements_enabled ? '</div>' : ''; ?>
 
 <?php
@@ -57,6 +71,18 @@ if ( ! empty( $order->get_billing_first_name() ) ) {
  * @since 2.5.0
  */
 do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
+
+// Adiciona imagens aos itens do pedido no email
+add_filter('woocommerce_email_order_items_table', function($table, $order, $args) {
+    foreach ($order->get_items() as $item) {
+        $product = $item->get_product();
+        if ($product) {
+            $image = get_product_image_for_email($product);
+            $item->set_meta('_product_image', $image);
+        }
+    }
+    return $table;
+}, 10, 3);
 
 /*
  * @hooked WC_Emails::order_meta() Shows order meta data.

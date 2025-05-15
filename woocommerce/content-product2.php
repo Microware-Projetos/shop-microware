@@ -90,3 +90,4 @@ if ($external_image) {
 		</div>
 	</div>
 </li>
+

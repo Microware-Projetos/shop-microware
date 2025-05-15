@@ -203,5 +203,65 @@ function storebiz_header_settings( $wp_customize ) {
 			'type'        => 'checkbox'
 		) 
 	);	
+
+	/*=========================================
+	Shop Categories Order
+	=========================================*/
+	$wp_customize->add_section(
+		'shop_categories_order',
+		array(
+			'priority'      => 4,
+			'title'         => __('Ordem das Categorias da Loja', 'storebiz'),
+			'panel'         => 'header_section',
+		)
+	);
+
+	// Ordem das Categorias
+	$wp_customize->add_setting(
+		'shop_categories_order_by',
+		array(
+			'default'           => 'name',
+			'capability'        => 'edit_theme_options',
+			'sanitize_callback' => 'storebiz_sanitize_select',
+		)
+	);
+
+	$wp_customize->add_control(
+		'shop_categories_order_by',
+		array(
+			'label'       => __('Ordenar por', 'storebiz'),
+			'section'     => 'shop_categories_order',
+			'type'        => 'select',
+			'choices'     => array(
+				'name'      => __('Nome', 'storebiz'),
+				'id'        => __('ID', 'storebiz'),
+				'count'     => __('Número de Produtos', 'storebiz'),
+				'menu_order'=> __('Ordem Personalizada', 'storebiz')
+			)
+		)
+	);
+
+	// Direção da Ordenação
+	$wp_customize->add_setting(
+		'shop_categories_order_direction',
+		array(
+			'default'           => 'ASC',
+			'capability'        => 'edit_theme_options',
+			'sanitize_callback' => 'storebiz_sanitize_select',
+		)
+	);
+
+	$wp_customize->add_control(
+		'shop_categories_order_direction',
+		array(
+			'label'       => __('Direção da Ordenação', 'storebiz'),
+			'section'     => 'shop_categories_order',
+			'type'        => 'select',
+			'choices'     => array(
+				'ASC'  => __('Crescente', 'storebiz'),
+				'DESC' => __('Decrescente', 'storebiz')
+			)
+		)
+	);
 }
 add_action( 'customize_register', 'storebiz_header_settings' );

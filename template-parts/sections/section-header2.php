@@ -46,13 +46,8 @@ $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
             <div class="d-flex align-items-center gap-7 header-icons-gap">
                 <!-- Conta -->
                 <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
-                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="text-dark d-flex align-items-center account-link">
-                        <i class="fa fa-user fa-lg me-2"></i>
-                        <?php if (!is_user_logged_in()) : ?>
-                            <span class="d-none d-lg-inline">
-                                Olá, faça seu login ou cadastre-se
-                            </span>
-                        <?php endif; ?>
+                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="text-dark">
+                        <i class="fa fa-user fa-lg"></i>
                     </a>
                 <?php endif; ?>
 
@@ -380,21 +375,6 @@ $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
 }
 .header-icons-gap > *:last-child {
     margin-right: 0 !important;
-}
-
-/* Ajuste do link de conta */
-.header-icons-gap .account-link {
-    text-decoration: none !important;
-    color: #212529;
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    font-weight: 500;
-    gap: 0.5rem;
-}
-.header-icons-gap .account-link:hover {
-    color: #007bff;
-    text-decoration: underline;
 }
 </style>
 
