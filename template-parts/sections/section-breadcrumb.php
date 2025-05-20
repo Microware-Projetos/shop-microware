@@ -111,76 +111,84 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
                 </div>
             </div>
 
-            <!-- Seção de Produtos em Destaque (Desktop) -->
-            <div class="col-12 d-none d-md-block">
+            <!-- Seção de Produtos em Destaque -->
+            <div class="col-12">
                 <div class="featured-products-section">
                     <h2 class="featured-products-title">Produtos em Destaque</h2>
-                    <div class="featured-products-grid">
-                        <?php
-                        $args = array(
-                            'post_type' => 'product',
-                            'posts_per_page' => 4,
-                            'tax_query' => array(
-                                array(
-                                    'taxonomy' => 'product_visibility',
-                                    'field'    => 'name',
-                                    'terms'    => 'featured',
+                    <div class="swiper featured-products-slider">
+                        <div class="swiper-wrapper">
+                            <?php
+                            $args = array(
+                                'post_type' => 'product',
+                                'posts_per_page' => 8, // Aumentei para 8 produtos para ter mais slides
+                                'tax_query' => array(
+                                    array(
+                                        'taxonomy' => 'product_visibility',
+                                        'field'    => 'name',
+                                        'terms'    => 'featured',
+                                    ),
                                 ),
-                            ),
-                        );
-                        
-                        $featured_products = new WP_Query($args);
-                        
-                        if ($featured_products->have_posts()) {
-                            while ($featured_products->have_posts()) {
-                                $featured_products->the_post();
-                                global $product;
-                                ?>
-                                <div class="featured-product-item">
-                                    <a href="<?php the_permalink(); ?>" class="product-link">
-                                        <div class="product-image-wrapper">
-                                            <?php 
-                                            // Verifica se existe imagem externa
-                                            $external_image = get_post_meta(get_the_ID(), '_external_image_url', true);
-                                            
-                                            if (!empty($external_image)) : ?>
-                                                <div class="product-image">
-                                                    <img src="<?php echo esc_url($external_image); ?>" 
-                                                         alt="<?php echo esc_attr(get_the_title()); ?>"
-                                                         class="wp-post-image">
-                                                </div>
-                                            <?php elseif (has_post_thumbnail()) : ?>
-                                                <div class="product-image">
+                            );
+                            
+                            $featured_products = new WP_Query($args);
+                            
+                            if ($featured_products->have_posts()) {
+                                while ($featured_products->have_posts()) {
+                                    $featured_products->the_post();
+                                    global $product;
+                                    ?>
+                                    <div class="swiper-slide">
+                                        <div class="featured-product-item">
+                                            <a href="<?php the_permalink(); ?>" class="product-link">
+                                                <div class="product-image-wrapper">
                                                     <?php 
-                                                    $image_id = get_post_thumbnail_id();
-                                                    $image_url = wp_get_attachment_image_src($image_id, 'woocommerce_thumbnail');
-                                                    if ($image_url) {
-                                                        echo '<img src="' . esc_url($image_url[0]) . '" 
-                                                                  alt="' . esc_attr(get_the_title()) . '" 
-                                                                  width="' . esc_attr($image_url[1]) . '" 
-                                                                  height="' . esc_attr($image_url[2]) . '">';
-                                                    }
-                                                    ?>
+                                                    // Verifica se existe imagem externa
+                                                    $external_image = get_post_meta(get_the_ID(), '_external_image_url', true);
+                                                    
+                                                    if (!empty($external_image)) : ?>
+                                                        <div class="product-image">
+                                                            <img src="<?php echo esc_url($external_image); ?>" 
+                                                                 alt="<?php echo esc_attr(get_the_title()); ?>"
+                                                                 class="wp-post-image">
+                                                        </div>
+                                                    <?php elseif (has_post_thumbnail()) : ?>
+                                                        <div class="product-image">
+                                                            <?php 
+                                                            $image_id = get_post_thumbnail_id();
+                                                            $image_url = wp_get_attachment_image_src($image_id, 'woocommerce_thumbnail');
+                                                            if ($image_url) {
+                                                                echo '<img src="' . esc_url($image_url[0]) . '" 
+                                                                          alt="' . esc_attr(get_the_title()) . '" 
+                                                                          width="' . esc_attr($image_url[1]) . '" 
+                                                                          height="' . esc_attr($image_url[2]) . '">';
+                                                            }
+                                                            ?>
+                                                        </div>
+                                                    <?php else : ?>
+                                                        <div class="product-image no-image">
+                                                            <img src="<?php echo esc_url(wc_placeholder_img_src()); ?>" alt="Imagem não disponível">
+                                                        </div>
+                                                    <?php endif; ?>
                                                 </div>
-                                            <?php else : ?>
-                                                <div class="product-image no-image">
-                                                    <img src="<?php echo esc_url(wc_placeholder_img_src()); ?>" alt="Imagem não disponível">
+                                                <h3 class="product-title"><?php the_title(); ?></h3>
+                                                <div class="product-price">
+                                                    <?php echo $product->get_price_html(); ?>
                                                 </div>
-                                            <?php endif; ?>
+                                            </a>
                                         </div>
-                                        <h3 class="product-title"><?php the_title(); ?></h3>
-                                        <div class="product-price">
-                                            <?php echo $product->get_price_html(); ?>
-                                        </div>
-                                    </a>
-                                </div>
-                                <?php
+                                    </div>
+                                    <?php
+                                }
+                                wp_reset_postdata();
+                            } else {
+                                echo '<p class="no-products">Nenhum produto em destaque encontrado.</p>';
                             }
-                            wp_reset_postdata();
-                        } else {
-                            echo '<p class="no-products">Nenhum produto em destaque encontrado.</p>';
-                        }
-                        ?>
+                            ?>
+                        </div>
+                        <!-- Controles do Carrossel -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
             </div>
@@ -367,6 +375,63 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     }
 }
 
+/* Estilos para o Carrossel de Produtos em Destaque */
+.featured-products-slider {
+    position: relative;
+    padding: 0 40px;
+    margin: 0 -10px;
+}
+
+.featured-products-slider .swiper-slide {
+    padding: 10px;
+}
+
+.featured-products-slider .swiper-button-next,
+.featured-products-slider .swiper-button-prev {
+    color: var(--bs-primary);
+    background: rgba(255,255,255,0.9);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.featured-products-slider .swiper-button-next:after,
+.featured-products-slider .swiper-button-prev:after {
+    font-size: 18px;
+}
+
+.featured-products-slider .swiper-pagination {
+    position: relative;
+    margin-top: 20px;
+}
+
+.featured-products-slider .swiper-pagination-bullet {
+    background: var(--bs-primary);
+    opacity: 0.5;
+}
+
+.featured-products-slider .swiper-pagination-bullet-active {
+    opacity: 1;
+}
+
+@media (max-width: 767px) {
+    .featured-products-slider {
+        padding: 0 30px;
+    }
+    
+    .featured-products-slider .swiper-button-next,
+    .featured-products-slider .swiper-button-prev {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .featured-products-slider .swiper-button-next:after,
+    .featured-products-slider .swiper-button-prev:after {
+        font-size: 16px;
+    }
+}
+
 /* Estilos para Produtos em Destaque */
 .featured-products-section {
     margin-top: 15px;
@@ -388,6 +453,46 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     margin: 0 -10px;
 }
 
+@media (max-width: 991px) {
+    .featured-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .featured-products-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .product-title {
+        font-size: 14px;
+    }
+    
+    .product-price {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 575px) {
+    .featured-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin: 0 -5px;
+    }
+    
+    .featured-product-item {
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    
+    .product-link {
+        padding: 8px;
+    }
+    
+    .product-image-wrapper {
+        margin-bottom: 8px;
+    }
+}
+
 .featured-product-item {
     background: #fff;
     border-radius: 8px;
@@ -407,7 +512,9 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
 .product-link {
     text-decoration: none;
     color: inherit;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     padding: 10px;
 }
 
@@ -455,13 +562,20 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     margin: 0 0 8px;
     color: #333;
     line-height: 1.2;
+    /* Limita o título a 2 linhas */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 36px; /* 2 linhas * 18px de altura da linha */
 }
 
 .product-price {
     font-size: 16px;
     font-weight: 600;
     color: var(--bs-primary);
-    margin-top: 5px;
+    margin-top: auto; /* Empurra o preço para baixo */
+    padding-top: 5px;
 }
 
 .product-price ins {
@@ -484,7 +598,90 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
 
 @media (max-width: 767px) {
     .featured-products-section {
-        display: none;
+        display: block;
+    }
+    
+    .product-title {
+        font-size: 14px;
+        height: 32px; /* 2 linhas * 16px de altura da linha */
+    }
+    
+    .product-price {
+        font-size: 14px;
+    }
+    
+    .product-link {
+        padding: 8px;
+    }
+}
+
+/* Estilos do Banner */
+.shop-banner-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.shop-banner-slider {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.shop-banner-slider .swiper-wrapper {
+    height: auto;
+}
+
+.shop-banner-slider .swiper-slide {
+    height: auto;
+}
+
+.shop-banner-slider .swiper-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+}
+
+.shop-banner-slider .swiper-button-next,
+.shop-banner-slider .swiper-button-prev {
+    color: var(--bs-primary);
+    background: rgba(255,255,255,0.9);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.shop-banner-slider .swiper-button-next:after,
+.shop-banner-slider .swiper-button-prev:after {
+    font-size: 20px;
+}
+
+.shop-banner-slider .swiper-pagination {
+    bottom: 10px;
+}
+
+.shop-banner-slider .swiper-pagination-bullet {
+    background: #fff;
+    opacity: 0.7;
+}
+
+.shop-banner-slider .swiper-pagination-bullet-active {
+    opacity: 1;
+    background: var(--bs-primary);
+}
+
+@media (max-width: 767px) {
+    .shop-banner-slider .swiper-button-next,
+    .shop-banner-slider .swiper-button-prev {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .shop-banner-slider .swiper-button-next:after,
+    .shop-banner-slider .swiper-button-prev:after {
+        font-size: 18px;
     }
 }
 </style>
@@ -500,6 +697,54 @@ document.addEventListener('DOMContentLoaded', function() {
             categoryList.classList.toggle('active');
         });
     }
+
+    // Inicializa o Swiper para produtos em destaque
+    const featuredProductsSlider = new Swiper('.featured-products-slider', {
+        slidesPerView: 2,
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.featured-products-slider .swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.featured-products-slider .swiper-button-next',
+            prevEl: '.featured-products-slider .swiper-button-prev',
+        },
+        breakpoints: {
+            768: {
+                slidesPerView: 3,
+                spaceBetween: 20,
+            },
+            992: {
+                slidesPerView: 4,
+                spaceBetween: 20,
+            }
+        }
+    });
+
+    // Inicializa o Swiper para o banner
+    const bannerSlider = new Swiper('.shop-banner-slider', {
+        slidesPerView: 1,
+        spaceBetween: 0,
+        loop: true,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.shop-banner-slider .swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.shop-banner-slider .swiper-button-next',
+            prevEl: '.shop-banner-slider .swiper-button-prev',
+        }
+    });
 });
 </script>
 <?php } ?>

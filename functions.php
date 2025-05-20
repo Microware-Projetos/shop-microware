@@ -1028,7 +1028,7 @@ function customizar_mensagem_input_quantidade() {
         #copy-email {
             margin-top: 10px;
             padding: 8px 12px;
-            background: #610B7A;
+            background: #000;
             color: white;
             border: none;
             border-radius: 4px;
@@ -1091,4 +1091,3 @@ function customizar_mensagem_input_quantidade() {
         <?php
     }
 }
-
