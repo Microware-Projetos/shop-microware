@@ -9,6 +9,7 @@
 
 get_header();
 ?>
+
 <section id="post-section" class="post-section st-py-default">
 	<div class="container">
 		<div class="row gy-lg-0 gy-5 wow fadeInUp">

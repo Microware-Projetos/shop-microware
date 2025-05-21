@@ -1091,3 +1091,74 @@ function customizar_mensagem_input_quantidade() {
         <?php
     }
 }
+
+/**
+ * Altera o texto do botão Adicionar ao Carrinho
+ */
+function custom_woocommerce_product_add_to_cart_text() {
+    return __('Comprar', 'storebiz');
+}
+add_filter('woocommerce_product_add_to_cart_text', 'custom_woocommerce_product_add_to_cart_text');
+add_filter('woocommerce_product_single_add_to_cart_text', 'custom_woocommerce_product_add_to_cart_text');
+
+function breadcrumb_personalizado() {
+    if ( is_front_page() ) return;
+
+    echo '<p id="breadcrumbs"><a href="' . esc_url(home_url()) . '">Início</a> &raquo; ';
+
+    if ( is_singular('product') ) {
+        global $post;
+        $terms = get_the_terms($post->ID, 'product_cat');
+
+        if ($terms && !is_wp_error($terms)) {
+            // Vamos buscar a categoria com maior profundidade (mais específica)
+            $deepest_term = null;
+            $max_depth = -1;
+
+            foreach ($terms as $term) {
+                $depth = 0;
+                $parent = $term->parent;
+
+                while ($parent) {
+                    $depth++;
+                    $parent_term = get_term($parent, 'product_cat');
+                    $parent = $parent_term->parent;
+                }
+
+                if ($depth > $max_depth) {
+                    $max_depth = $depth;
+                    $deepest_term = $term;
+                }
+            }
+
+            if ($deepest_term) {
+                // Obter todos os ancestrais da subcategoria mais profunda
+                $ancestors = get_ancestors($deepest_term->term_id, 'product_cat');
+                $ancestors = array_reverse($ancestors);
+
+                foreach ($ancestors as $ancestor_id) {
+                    $ancestor = get_term($ancestor_id, 'product_cat');
+                    echo '<a href="' . esc_url(get_term_link($ancestor)) . '">' . esc_html($ancestor->name) . '</a> &raquo; ';
+                }
+
+                echo '<a href="' . esc_url(get_term_link($deepest_term)) . '">' . esc_html($deepest_term->name) . '</a> &raquo; ';
+            }
+        }
+
+        echo '<span>' . esc_html(get_the_title()) . '</span>';
+
+    } elseif ( is_product_category() ) {
+        $term = get_queried_object();
+        $ancestors = get_ancestors($term->term_id, 'product_cat');
+        $ancestors = array_reverse($ancestors);
+
+        foreach ($ancestors as $ancestor_id) {
+            $ancestor = get_term($ancestor_id, 'product_cat');
+            echo '<a href="' . esc_url(get_term_link($ancestor)) . '">' . esc_html($ancestor->name) . '</a> &raquo; ';
+        }
+
+        echo '<span>' . esc_html($term->name) . '</span>';
+    }
+
+    echo '</p>';
+}

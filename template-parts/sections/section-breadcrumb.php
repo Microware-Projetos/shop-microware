@@ -30,17 +30,24 @@
             'order' => $order
         ]);
     }
-    
-		
+
+    echo '<div class="container">';
+    if ( is_singular('product') || is_post_type_archive('product') || is_tax('product_cat') || is_tax('product_tag') ) {
+        echo '<div style="margin: 10px;">';
+        breadcrumb_personalizado();
+        echo '</div>';
+    }
+    echo '</div>';
+
 if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() && !is_checkout() && !is_search() ) {	
         ?>
-<section id="breadcrumb-section" class="custom-shop-header" style="padding: 20px 0 0 0; margin-bottom: 0;">
+<section id="breadcrumb-section" class="custom-shop-header" style="padding: 5px 0 0 0; margin-bottom: 0;">
 
     <div class="container">
         <div class="row">
 
             <!-- Coluna da Sidebar (Categorias Dinâmicas) -->
-            <div class="col-12 col-md-3 mb-4 mb-md-0">
+            <div class="col-12 col-md-3 mb-1 mb-md-0">
                 <div class="shop-categories-box">
                     <h3 class="category-title d-none d-md-block">Categorias</h3>
                     
@@ -205,12 +212,12 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     
     .mobile-categories-select {
         width: 100%;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
     }
 
     .mobile-categories-select select {
         width: 100%;
-        padding: 12px 15px;
+        padding: 8px 15px;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         background-color: #f8f9fa;
@@ -238,7 +245,7 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     }
     
     .shop-banner-box {
-        margin-top: 0;
+        margin-top: 5px;
     }
     
     .shop-banner-box img {
@@ -682,6 +689,37 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     .shop-banner-slider .swiper-button-next:after,
     .shop-banner-slider .swiper-button-prev:after {
         font-size: 18px;
+    }
+}
+
+/* Estilos para Desktop */
+@media (min-width: 768px) {
+    .custom-shop-header {
+        padding-top: 20px !important;
+    }
+
+    .shop-categories-box {
+        margin-top: 10px;
+    }
+
+    .shop-banner-box {
+        margin-top: 10px;
+    }
+}
+
+/* Estilos Mobile (mantendo como está) */
+@media (max-width: 767px) {
+    .custom-shop-header {
+        padding-top: 5px !important;
+    }
+    
+    .shop-categories-box {
+        display: none;
+    }
+    
+    .mobile-categories-select {
+        width: 100%;
+        margin-bottom: 5px;
     }
 }
 </style>
