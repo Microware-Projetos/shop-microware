@@ -206,18 +206,23 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
 
 <style>
 @media (max-width: 767px) {
+    .custom-shop-header {
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+    }
+    
     .shop-categories-box {
         display: none;
     }
     
     .mobile-categories-select {
         width: 100%;
-        margin-bottom: 5px;
+        margin-bottom: 15px;
     }
 
     .mobile-categories-select select {
         width: 100%;
-        padding: 8px 15px;
+        padding: 12px 15px;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         background-color: #f8f9fa;
@@ -233,47 +238,18 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         cursor: pointer;
         transition: all 0.3s ease;
     }
-
-    .mobile-categories-select select:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
-    }
-
-    .mobile-categories-select select:hover {
-        border-color: #007bff;
-    }
     
     .shop-banner-box {
-        margin-top: 5px;
+        margin: 15px 0;
     }
     
-    .shop-banner-box img {
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    .featured-products-section {
+        margin-top: 15px;
+        padding: 15px 0;
     }
 
-    .shop-banner-slider {
-        position: relative;
-    }
-
-    .swiper-slide img {
-        border-radius: 12px;
-    }
-
-    .swiper-button-next,
-    .swiper-button-prev {
-        color: #007bff;
-        background: rgba(255,255,255,0.9);
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    .swiper-button-next:after,
-    .swiper-button-prev:after {
-        font-size: 18px;
+    .featured-products-title {
+        margin-bottom: 15px;
     }
 }
 
