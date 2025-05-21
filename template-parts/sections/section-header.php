@@ -70,73 +70,118 @@ ou cadastre-se' : 'Minha Conta'; ?>
         </div>
 
         <!-- Estrutura Mobile -->
-        <div class="d-lg-none">
-            <!-- Top Row Mobile -->
-            <div class="d-flex justify-content-center align-items-center mb-3 position-relative">
-                <!-- Logo Mobile -->
-                <div class="site-branding-mobile text-center w-100">
-                    <?php if (has_custom_logo()) : ?>
-                        <?php 
-                        $custom_logo_id = get_theme_mod('custom_logo');
-                        $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
-                        ?>
-                        <a href="<?php echo esc_url(home_url('/')); ?>" class="d-inline-block">
-                            <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo-mobile" style="max-height: 55px; width: auto;">
-                        </a>
-                    <?php else : ?>
-                        <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
-                            <?php bloginfo('name'); ?>
-                        </a>
-                    <?php endif; ?>
-                </div>
-                <!-- Menu Toggle Mobile -->
-                <button class="navbar-toggler border-0 position-absolute end-0" type="button" data-bs-toggle="collapse" data-bs-target="#main-menu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-
-            <!-- Links Mobile -->
-            <div class="mobile-links d-flex justify-content-center gap-2 mb-3">
-                <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
-                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="btn btn-light btn-sm">
-                        <i class="fa fa-user"></i> <?php echo (!is_user_logged_in()) ? 'Entrar' : 'Minha Conta'; ?>
+        <div class="d-lg-none position-relative">
+            <!-- Logo Mobile -->
+            <div class="site-branding-mobile text-center w-100 py-2">
+                <?php if (has_custom_logo()) : ?>
+                    <?php 
+                    $custom_logo_id = get_theme_mod('custom_logo');
+                    $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                    ?>
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="d-inline-block">
+                        <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo-mobile" style="max-height: 55px; width: auto;">
+                    </a>
+                <?php else : ?>
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
+                        <?php bloginfo('name'); ?>
                     </a>
                 <?php endif; ?>
             </div>
-        </div>
-
-        <!-- Mobile menu -->
-        <div class="collapse navbar-collapse mt-3" id="main-menu">
-            <?php
-            wp_nav_menu(array(
-                'theme_location' => 'primary',
-                'container'      => false,
-                'menu_class'     => 'navbar-nav',
-                'fallback_cb'    => '__return_false',
-                'depth'          => 2,
-                'walker'         => new WP_Bootstrap_Navwalker(),
-            ));
-            ?>
+            <!-- Botão Hamburguer -->
+            <button id="mobileMenuBtn" class="mobile-menu-btn position-absolute" style="top:18px; right:18px; z-index:1200; background:transparent; border:none;">
+                <span class="mobile-menu-icon">
+                    <span></span><span></span><span></span>
+                </span>
+            </button>
+            <!-- Menu Offcanvas -->
+            <div id="mobileMenu" class="mobile-offcanvas">
+                <div class="mobile-offcanvas-header d-flex justify-content-between align-items-center">
+                    <span class="fw-bold fs-5">Menu</span>
+                    <button class="mobile-menu-close" aria-label="Fechar menu">&times;</button>
+                </div>
+                <ul class="mobile-menu-list">
+                    <li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
+                    <li class="mobile-menu-dropdown">
+                        <a href="#" class="dropdown-toggle">Categorias</a>
+                        <ul class="mobile-submenu">
+                        <?php
+                        $orderby = get_theme_mod('shop_categories_order_by', 'name');
+                        $order = get_theme_mod('shop_categories_order_direction', 'ASC');
+                        $manual_order = get_theme_mod('custom_category_order', '');
+                        if ($manual_order) {
+                            $ids = array_map('intval', explode(',', $manual_order));
+                            $product_categories = get_terms([
+                                'taxonomy' => 'product_cat',
+                                'include' => $ids,
+                                'orderby' => 'include',
+                                'hide_empty' => true,
+                                'parent' => 0,
+                            ]);
+                        } else {
+                            $product_categories = get_terms([
+                                'taxonomy' => 'product_cat',
+                                'hide_empty' => true,
+                                'parent' => 0,
+                                'orderby' => $orderby,
+                                'order' => $order
+                            ]);
+                        }
+                        foreach ($product_categories as $cat) {
+                            $category_link = get_term_link($cat->term_id, 'product_cat');
+                            // Buscar subcategorias
+                            $sub_cats = get_terms([
+                                'taxonomy' => 'product_cat',
+                                'hide_empty' => true,
+                                'parent' => $cat->term_id,
+                                'orderby' => 'name',
+                                'order' => 'ASC'
+                            ]);
+                            
+                            if ($sub_cats && !is_wp_error($sub_cats)) {
+                                echo '<li class="mobile-submenu-item">';
+                                echo '<a href="' . esc_url($category_link) . '" class="mobile-submenu-toggle">' . esc_html($cat->name) . ' <span class="arrow">▼</span></a>';
+                                echo '<ul class="mobile-submenu-level-2">';
+                                foreach ($sub_cats as $sub_cat) {
+                                    $sub_category_link = get_term_link($sub_cat->term_id, 'product_cat');
+                                    echo '<li><a href="' . esc_url($sub_category_link) . '">' . esc_html($sub_cat->name) . '</a></li>';
+                                }
+                                echo '</ul>';
+                                echo '</li>';
+                            } else {
+                                echo '<li><a href="' . esc_url($category_link) . '">' . esc_html($cat->name) . '</a></li>';
+                            }
+                        }
+                        ?>
+                        </ul>
+                    </li>
+                    <li><a href="https://www.microware.com.br/quem-somos.html">Quem Somos</a></li>
+                    <li><a href="https://www.microware.com.br/contato.html">Contatos</a></li>
+                </ul>
+            </div>
+            <div id="mobileMenuOverlay" class="mobile-menu-overlay"></div>
         </div>
     </div>
 </header>
 
 <!-- Menu principal -->
-<nav class="navbar navbar-expand-lg main-navbar-menu" style="margin-bottom:0; margin-top:0; padding-top:0; padding-bottom:0; border-top:0; box-shadow:none; background:#f8f9fa;">
+<nav class="navbar navbar-expand-lg main-navbar-menu d-none d-lg-block" style="margin-bottom:0; margin-top:0; padding-top:0; padding-bottom:0; border-top:0; box-shadow:none; background:#f8f9fa;">
     <div class="container">
-        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler d-lg-none mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="mainMenu">
+        <div class="collapse navbar-collapse mobile-menu" id="mainMenu">
+            <div class="mobile-menu-header d-lg-none">
+                <button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-label="Close"></button>
+            </div>
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo esc_url(home_url('/')); ?>">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="categoriasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle mobile-dropdown-toggle" href="#" id="categoriasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Categorias
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="categoriasDropdown">
+                    <ul class="dropdown-menu mobile-dropdown" aria-labelledby="categoriasDropdown">
                         <?php
                         // Definindo os termos das categorias uma única vez, com suporte à ordem manual
                         $orderby = get_theme_mod('shop_categories_order_by', 'name');
@@ -815,42 +860,225 @@ ou cadastre-se' : 'Minha Conta'; ?>
     margin-bottom: 1.5rem;
     padding-left: 0.5rem; /* ajuste conforme o layout */
 }
-</style>
 
-<script>
-jQuery(document).ready(function($) {
-    // Atualizar mini carrinho via AJAX
-    $(document.body).on('added_to_cart removed_from_cart', function() {
-        $('.widget_shopping_cart_content').load(window.wc_cart_fragments_params.wc_ajax_url.toString().replace('%%endpoint%%', 'get_refreshed_fragments'));
-    });
-
-    // Impedir redirecionamento ao clicar no ícone do carrinho no mobile
-    function isMobile() {
-        return window.innerWidth <= 991;
+/* --- MENU MOBILE NOVO --- */
+@media (max-width: 991px) {
+    .mobile-menu-btn {
+        display: block !important;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        justify-content: center;
+        align-items: center;
     }
-    $('.cart-wrapper > a').on('click', function(e) {
-        if (isMobile()) {
-            e.preventDefault();
-            // Força a abertura do mini-cart
-            $(this).siblings('.mini-cart-dropdown').toggle();
-        }
+    .mobile-menu-icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+    }
+    .mobile-menu-icon span {
+        display: block;
+        width: 26px;
+        height: 3px;
+        margin: 4px 0;
+        background: #222;
+        border-radius: 2px;
+        transition: all 0.3s;
+    }
+    .mobile-offcanvas {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: 80vw;
+        max-width: 320px;
+        background: #fff;
+        z-index: 2000;
+        box-shadow: 2px 0 16px rgba(0,0,0,0.08);
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+        padding: 0;
+        overflow-y: auto;
+        height: 100vh;
+    }
+    .mobile-offcanvas.open {
+        transform: translateX(0);
+    }
+    .mobile-menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.25);
+        z-index: 1999;
+    }
+    .mobile-menu-overlay.active {
+        display: block;
+    }
+    .mobile-offcanvas-header {
+        padding: 1.2rem 1.2rem 0.5rem 1.2rem;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+    }
+    .mobile-menu-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        line-height: 1;
+        color: #222;
+        cursor: pointer;
+    }
+    .mobile-menu-list {
+        list-style: none;
+        margin: 0;
+        padding: 1rem 0 1rem 0;
+    }
+    .mobile-menu-list > li {
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .mobile-menu-list a {
+        display: block;
+        padding: 0.9rem 1.5rem;
+        color: #222;
+        text-decoration: none;
+        font-size: 1.08rem;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+    .mobile-menu-list a:hover {
+        background: #f8f9fa;
+    }
+    .mobile-menu-dropdown > .dropdown-toggle {
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .mobile-menu-dropdown .arrow {
+        font-size: 1rem;
+        margin-left: 8px;
+        transition: transform 0.3s;
+    }
+    .mobile-menu-dropdown.open .arrow {
+        transform: rotate(180deg);
+    }
+    .mobile-submenu {
+        display: none;
+        list-style: none;
+        padding-left: 1.5rem;
+        background: #fafbfc;
+    }
+    .mobile-menu-dropdown.open .mobile-submenu {
+        display: block;
+    }
+}
+
+/* Ajuste para garantir que o menu desktop fique oculto em mobile */
+@media (max-width: 991px) {
+    .main-navbar-menu {
+        display: none !important;
+    }
+    
+    .navbar-collapse {
+        display: none !important;
+    }
+}
+
+/* Estilos para submenu mobile */
+.mobile-submenu-item {
+    position: relative;
+}
+
+.mobile-submenu-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1.5rem;
+    color: #222;
+    text-decoration: none;
+    font-size: 1.08rem;
+    font-weight: 500;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.mobile-submenu-toggle .arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+}
+
+.mobile-submenu-item.open .mobile-submenu-toggle .arrow {
+    transform: rotate(180deg);
+}
+
+.mobile-submenu-level-2 {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #fff;
+}
+
+.mobile-submenu-item.open .mobile-submenu-level-2 {
+    display: block;
+}
+
+.mobile-submenu-level-2 li a {
+    padding: 0.8rem 2rem;
+    display: block;
+    color: #444;
+    text-decoration: none;
+    font-size: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-submenu-level-2 li:last-child a {
+    border-bottom: none;
+}
+
+.mobile-submenu-level-2 li a:hover {
+    background: #f8f9fa;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('mobileMenuBtn');
+    var menu = document.getElementById('mobileMenu');
+    var overlay = document.getElementById('mobileMenuOverlay');
+    var closeBtn = document.querySelector('.mobile-menu-close');
+    var dropdown = document.querySelector('.mobile-menu-dropdown');
+    var dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+    var submenu = dropdown.querySelector('.mobile-submenu');
+
+    btn.addEventListener('click', function() {
+        menu.classList.add('open');
+        overlay.classList.add('active');
     });
-    // Fecha o mini-cart ao clicar fora no mobile
-    $(document).on('click touchstart', function(e) {
-        if (isMobile()) {
-            if (!$(e.target).closest('.cart-wrapper').length) {
-                $('.mini-cart-dropdown').hide();
-            }
-        }
+    closeBtn.addEventListener('click', function() {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+    overlay.addEventListener('click', function() {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+    dropdownToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        dropdown.classList.toggle('open');
     });
 
-    // Adicionar suporte para submenu no mobile
-    $('.dropdown-submenu > a').on('click', function(e) {
-        if (window.innerWidth < 992) {
+    // Adicionar funcionalidade para submenu mobile
+    var submenuItems = document.querySelectorAll('.mobile-submenu-item');
+    submenuItems.forEach(function(item) {
+        var toggle = item.querySelector('.mobile-submenu-toggle');
+        toggle.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            $(this).next('.dropdown-menu').slideToggle();
-        }
+            item.classList.toggle('open');
+        });
     });
 });
 </script>
