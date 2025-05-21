@@ -71,28 +71,42 @@ ou cadastre-se' : 'Minha Conta'; ?>
 
         <!-- Estrutura Mobile -->
         <div class="d-lg-none position-relative">
-            <!-- Logo Mobile -->
-            <div class="site-branding-mobile text-center w-100 py-2">
-                <?php if (has_custom_logo()) : ?>
-                    <?php 
-                    $custom_logo_id = get_theme_mod('custom_logo');
-                    $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
-                    ?>
-                    <a href="<?php echo esc_url(home_url('/')); ?>" class="d-inline-block">
-                        <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo-mobile" style="max-height: 55px; width: auto;">
-                    </a>
-                <?php else : ?>
-                    <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
-                        <?php bloginfo('name'); ?>
+            <!-- Header Mobile com 3 colunas -->
+            <div class="mobile-header-wrapper d-flex align-items-center justify-content-between">
+                <!-- Botão Hamburguer (Esquerda) -->
+                <button id="mobileMenuBtn" class="mobile-menu-btn ms-3" aria-label="Abrir menu">
+                    <span class="mobile-menu-icon">
+                        <span></span><span></span><span></span>
+                    </span>
+                </button>
+
+                <!-- Logo Mobile (Centro) -->
+                <div class="site-branding-mobile text-center">
+                    <?php if (has_custom_logo()) : ?>
+                        <?php 
+                        $custom_logo_id = get_theme_mod('custom_logo');
+                        $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                        ?>
+                        <a href="<?php echo esc_url(home_url('/')); ?>" class="d-inline-block">
+                            <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo-mobile" style="max-height: 55px; width: auto;">
+                        </a>
+                    <?php else : ?>
+                        <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
+                            <?php bloginfo('name'); ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Ícone de Conta (Direita) -->
+                <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
+                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="mobile-account-link me-3">
+                        <i class="fa fa-user fa-lg"></i>
+                        <span class="mobile-account-text">
+                            <?php echo (!is_user_logged_in()) ? 'Entrar' : 'Minha Conta'; ?>
+                        </span>
                     </a>
                 <?php endif; ?>
             </div>
-            <!-- Botão Hamburguer -->
-            <button id="mobileMenuBtn" class="mobile-menu-btn position-absolute" style="top:18px; right:18px; z-index:1200; background:transparent; border:none;">
-                <span class="mobile-menu-icon">
-                    <span></span><span></span><span></span>
-                </span>
-            </button>
             <!-- Menu Offcanvas -->
             <div id="mobileMenu" class="mobile-offcanvas">
                 <div class="mobile-offcanvas-header d-flex justify-content-between align-items-center">
@@ -1041,6 +1055,151 @@ ou cadastre-se' : 'Minha Conta'; ?>
 
 .mobile-submenu-level-2 li a:hover {
     background: #f8f9fa;
+}
+
+/* Ajustes para o header mobile */
+.mobile-header-wrapper {
+    padding: 0.5rem 0;
+    position: relative;
+    width: 100%;
+}
+
+.mobile-menu-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    background: none !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+    box-shadow: none !important;
+}
+
+.mobile-menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background: none;
+}
+
+.mobile-menu-icon span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    margin: 2px 0;
+    background: #222;
+    border-radius: 2px;
+    transition: all 0.3s;
+    box-shadow: none;
+}
+
+.site-branding-mobile {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+    z-index: 1;
+}
+
+.mobile-account-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #222;
+    text-decoration: none;
+    font-size: 1rem;
+    z-index: 1200;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.mobile-account-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.mobile-account-link:hover {
+    color: var(--bs-primary);
+    background: rgba(0, 123, 255, 0.05);
+}
+
+@media (max-width: 360px) {
+    .mobile-account-text {
+        display: none;
+    }
+    
+    .mobile-account-link {
+        padding: 0.5rem;
+    }
+}
+
+/* Ajuste para garantir que o logo fique centralizado mesmo com os textos */
+@media (max-width: 991px) {
+    .site-branding-mobile {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        max-width: 180px; /* Reduzido para dar mais espaço aos textos */
+    }
+    
+    .custom-logo-mobile {
+        max-height: 45px;
+        width: auto;
+    }
+}
+
+/* Reset e ajustes para o botão hamburger */
+.mobile-menu-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    margin-left: 10px;
+    background: none !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+    box-shadow: none !important;
+}
+
+.mobile-menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background: none;
+}
+
+.mobile-menu-icon span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    margin: 2px 0;
+    background: #222;
+    border-radius: 2px;
+    transition: all 0.3s;
+    box-shadow: none;
+}
+
+/* Remover qualquer estilo que possa estar sendo herdado */
+.mobile-menu-btn:focus,
+.mobile-menu-btn:active,
+.mobile-menu-btn:hover {
+    background: none !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
 </style>
 <script>
