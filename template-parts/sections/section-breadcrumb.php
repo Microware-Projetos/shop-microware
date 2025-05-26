@@ -265,6 +265,10 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         height: 100%;
         display: flex;
         flex-direction: column;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        padding: 15px;
     }
     
     .shop-categories-list {
@@ -275,6 +279,7 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         height: 100%;
         display: flex;
         flex-direction: column;
+        justify-content: space-between; /* Distribui o espaço igualmente */
     }
     
     .shop-categories-list li {
@@ -286,6 +291,9 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         transition: background 0.2s;
         margin-bottom: 4px;
         list-style: none;
+        flex: 1; /* Faz cada item crescer igualmente */
+        display: flex;
+        align-items: center;
     }
     
     .shop-categories-list li:last-child {
@@ -297,7 +305,8 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         text-decoration: none;
         display: block;
         width: 100%;
-        font-size: 14px;
+        font-size: 15px;
+        font-weight: 500;
         line-height: 1.3;
     }
     
@@ -310,6 +319,8 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         font-size: 16px;
         font-weight: 600;
         line-height: 1.2;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
     }
     
     .row {
@@ -356,6 +367,18 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         height: 100%;
         object-fit: cover;
     }
+
+    /* Ajuste dinâmico do espaçamento baseado na quantidade de categorias */
+    .shop-categories-list[data-items="1"] li { padding: 20px 12px; }
+    .shop-categories-list[data-items="2"] li { padding: 15px 12px; }
+    .shop-categories-list[data-items="3"] li { padding: 12px 12px; }
+    .shop-categories-list[data-items="4"] li { padding: 10px 12px; }
+    .shop-categories-list[data-items="5"] li { padding: 8px 12px; }
+    .shop-categories-list[data-items="6"] li { padding: 7px 12px; }
+    .shop-categories-list[data-items="7"] li { padding: 6px 12px; }
+    .shop-categories-list[data-items="8"] li { padding: 5px 12px; }
+    .shop-categories-list[data-items="9"] li { padding: 4px 12px; }
+    .shop-categories-list[data-items="10"] li { padding: 3px 12px; }
 }
 
 /* Estilos para o Carrossel de Produtos em Destaque */
@@ -759,6 +782,12 @@ document.addEventListener('DOMContentLoaded', function() {
             prevEl: '.shop-banner-slider .swiper-button-prev',
         }
     });
+
+    // Adiciona o atributo data-items baseado na quantidade de categorias
+    if (categoryList) {
+        const items = categoryList.querySelectorAll('li').length;
+        categoryList.setAttribute('data-items', items);
+    }
 });
 </script>
 <?php } ?>
