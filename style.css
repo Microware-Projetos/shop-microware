@@ -176,3 +176,408 @@ widget .wp-block-group .wp-block-rss li:last-child {
         padding: 15px;
     }
 }
+
+/* Estilos para o Footer Fixo */
+.footer-section {
+    position: relative;
+    z-index: 10;
+    background-color: #1F2120 !important;
+}
+
+.footer-main {
+    padding: 20px 0 15px;
+}
+
+.footer-main .textwidget,
+.footer-main .logo,
+.footer-main .links,
+.footer-main .contact-info,
+.footer-main .contact-info .text,
+.footer-main .contact-info ul.text,
+.footer-main .contact-info ul.text li {
+    text-align: left !important;
+}
+
+.footer-main .links li,
+.footer-main .contact-area {
+    justify-content: flex-start !important;
+}
+
+.footer-main .links {
+    padding-left: 0 !important;
+}
+
+.footer-main .links li em {
+    margin-right: 3px;
+    font-size: 11px;
+    color: #ffffff;
+    min-width: unset;
+    display: inline-block;
+    text-align: center;
+}
+
+.footer-main .contact-area {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    justify-content: flex-start;
+}
+
+.footer-main .contact-icon {
+    margin-right: 4px;
+    margin-top: 1px;
+    min-width: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-main .contact-corn {
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 10px;
+}
+
+/* Mantém as colunas centralizadas */
+.footer-main .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Logo no footer */
+.footer-main .logo {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.footer-main .logo img {
+    max-width: 150px;
+    height: auto;
+}
+
+/* Links do footer */
+.footer-main .links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.footer-main .links li {
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-main .links li a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 13px;
+}
+
+.footer-main .links li a:hover {
+    color: #f0f0f0;
+    text-decoration: underline;
+}
+
+/* Áreas de contato */
+.footer-main .contact-info {
+    flex: 1;
+    text-align: center;
+}
+
+.footer-main .contact-info .text {
+    color: #ffffff;
+    margin: 0 0 2px 0;
+    font-size: 12px;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.footer-main .contact-info .text a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-main .contact-info .text a:hover {
+    color: #f0f0f0;
+    text-decoration: underline;
+}
+
+/* Lista de serviços */
+.footer-main .contact-info ul.text {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.footer-main .contact-info ul.text li {
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.footer-main .contact-info ul.text li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 1.2;
+    transition: color 0.3s ease;
+}
+
+.footer-main .contact-info ul.text li a:hover {
+    color: #f0f0f0;
+    text-decoration: underline;
+}
+
+/* Footer bottom */
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 0;
+    background-color: #1F2120;
+}
+
+.footer-copyright .copyright-text p {
+    color: #ffffff;
+    margin: 0;
+    font-size: 12px;
+    text-align: center;
+}
+
+.footer-copyright .copyright-text a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer-copyright .copyright-text a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividade para o footer */
+@media screen and (max-width: 991px) {
+    .footer-main {
+        padding: 15px 0 12px;
+    }
+    
+    .footer-main .logo img {
+        max-width: 120px;
+    }
+    
+    .footer-main .contact-area {
+        margin-bottom: 8px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .footer-main {
+        padding: 12px 0 10px;
+    }
+    
+    .footer-main .logo {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .footer-main .logo img {
+        max-width: 80px;
+    }
+    
+    .footer-main .contact-area {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+    }
+    
+    .footer-main .contact-icon {
+        margin-right: 0;
+        margin-bottom: 6px;
+    }
+    
+    .footer-main .links li {
+        justify-content: center;
+    }
+    
+    .footer-main .contact-info ul.text li {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .footer-main {
+        padding: 10px 0 8px;
+    }
+    
+    .footer-main .logo img {
+        max-width: 60px;
+    }
+    
+    .footer-main .contact-info .text {
+        font-size: 11px;
+    }
+    
+    .footer-main .contact-info ul.text li a {
+        font-size: 11px;
+    }
+}
+
+/* Responsividade: mantém alinhamento à esquerda em telas menores */
+@media screen and (max-width: 991px) {
+    .footer-main .textwidget,
+    .footer-main .logo,
+    .footer-main .links,
+    .footer-main .contact-info,
+    .footer-main .contact-info .text,
+    .footer-main .contact-info ul.text,
+    .footer-main .contact-info ul.text li {
+        text-align: left !important;
+    }
+}
+@media screen and (max-width: 767px) {
+    .footer-main .col {
+        align-items: flex-start;
+    }
+}
+
+/* Padronização de textos e espaçamentos no footer */
+.footer-main .links li,
+.footer-main .contact-info .text,
+.footer-main .contact-info ul.text li {
+    font-size: 14px !important;
+    margin-bottom: 6px !important;
+    line-height: 1.4 !important;
+    font-weight: 400 !important;
+    list-style: none !important;
+    padding-left: 0 !important;
+}
+
+.footer-main .links,
+.footer-main .contact-info ul.text {
+    padding-left: 0 !important;
+    margin: 0 !important;
+}
+
+.footer-main .links li a,
+.footer-main .contact-info ul.text li a {
+    font-size: 14px !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    font-weight: 400 !important;
+}
+
+.footer-main .links li a:hover,
+.footer-main .contact-info ul.text li a:hover {
+    color: #f0f0f0 !important;
+    text-decoration: underline !important;
+}
+
+.footer-main .links li:last-child,
+.footer-main .contact-info .text:last-child,
+.footer-main .contact-info ul.text li:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Remove qualquer seta ou ícone residual */
+.footer-main .links li em,
+.footer-main .contact-icon,
+.footer-main .contact-corn {
+    display: none !important;
+}
+
+/* Títulos das colunas */
+.footer-main .textwidget p[style*="font-weight: bold"] {
+    font-size: 15px !important;
+    margin-bottom: 8px !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+}
+
+/* Padronização total do footer */
+.footer-main ul.links,
+.footer-main ul.text {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+}
+
+.footer-main ul.links li,
+.footer-main ul.text li,
+.footer-main .contact-info .text {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    margin-bottom: 6px !important;
+    color: #fff !important;
+    line-height: 1.4 !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    list-style: none !important;
+    padding-left: 0 !important;
+    text-indent: 0 !important;
+    display: block !important;
+}
+
+.footer-main ul.links li a,
+.footer-main ul.text li a,
+.footer-main .contact-info .text a {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.footer-main ul.links li a:hover,
+.footer-main ul.text li a:hover,
+.footer-main .contact-info .text a:hover {
+    color: #f0f0f0 !important;
+    text-decoration: underline !important;
+}
+
+.footer-main ul.links li:last-child,
+.footer-main ul.text li:last-child,
+.footer-main .contact-info .text:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Remove qualquer marcador, seta ou ícone */
+.footer-main ul.links li::before,
+.footer-main ul.text li::before,
+.footer-main .links li em,
+.footer-main .contact-icon,
+.footer-main .contact-corn {
+    display: none !important;
+    content: none !important;
+}
+
+.footer-link-item, .footer-link-item a {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #fff !important;
+    margin-bottom: 6px !important;
+    line-height: 1.4 !important;
+    text-decoration: none !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    text-indent: 0 !important;
+    display: block !important;
+}
+
+.footer-link-item:last-child, .footer-link-item:last-child a {
+    margin-bottom: 0 !important;
+}
+
+.footer-link-item a:hover {
+    color: var(--bs-primary, #007bff) !important;
+    text-decoration: underline !important;
+}

@@ -45,45 +45,8 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
 
     <div class="container">
         <div class="row">
-
-            <!-- Coluna da Sidebar (Categorias Dinâmicas) -->
-            <div class="col-12 col-md-3 mb-1 mb-md-0">
-                <div class="shop-categories-box">
-                    <h3 class="category-title d-none d-md-block">Categorias</h3>
-                    
-                    <!-- Lista para Desktop -->
-                    <ul class="shop-categories-list desktop-only">
-                        <?php
-                        if (!empty($terms) && !is_wp_error($terms)) {
-                            foreach ($terms as $term) {
-                                $term_link = get_term_link($term);
-                                echo '<li><a href="' . esc_url($term_link) . '">' . esc_html($term->name) . '</a></li>';
-                            }
-                        } else {
-                            echo '<li>Nenhuma categoria encontrada.</li>';
-                        }
-                        ?>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Coluna do Banner -->
-            <div class="col-12 col-md-9">
-                <!-- Select para Mobile -->
-                <div class="mobile-categories-select d-md-none">
-                    <select onchange="window.location.href=this.value">
-                        <option value="">Selecione uma categoria</option>
-                        <?php
-                        if (!empty($terms) && !is_wp_error($terms)) {
-                            foreach ($terms as $term) {
-                                $term_link = get_term_link($term);
-                                echo '<option value="' . esc_url($term_link) . '">' . esc_html($term->name) . '</option>';
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-
+            <!-- Coluna do Banner (agora ocupa toda a largura) -->
+            <div class="col-12">
                 <?php 
                 $shop_banner = get_theme_mod('custom_shop_banner', get_template_directory_uri() . '/assets/images/banner-lenovo.jpg');
                 ?>
@@ -149,34 +112,6 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         padding-bottom: 15px !important;
     }
     
-    .shop-categories-box {
-        display: none;
-    }
-    
-    .mobile-categories-select {
-        width: 100%;
-        margin-bottom: 15px;
-    }
-
-    .mobile-categories-select select {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        background-color: #f8f9fa;
-        font-size: 16px;
-        color: #555;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right 15px center;
-        background-size: 15px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
     .shop-banner-box {
         margin: 15px 0;
     }
@@ -189,133 +124,6 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     .featured-products-title {
         margin-bottom: 15px;
     }
-}
-
-@media (min-width: 768px) {
-    .mobile-categories-select {
-        display: none;
-    }
-    
-    .shop-categories-box {
-        display: block;
-        width: 100%;
-        margin-bottom: 0;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        padding: 15px;
-    }
-    
-    .shop-categories-list {
-        display: block;
-        width: 100%;
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start; /* Agrupa as categorias no topo */
-    }
-    
-    .shop-categories-list li {
-        white-space: normal;
-        word-break: break-word;
-        line-height: 1.3;
-        padding: 8px 12px;
-        border-radius: 6px;
-        transition: background 0.2s;
-        margin-bottom: 4px;
-        list-style: none;
-        display: flex;
-        align-items: center;
-    }
-    
-    .shop-categories-list li:last-child {
-        margin-bottom: 0;
-    }
-    
-    .shop-categories-list li a {
-        color: #222;
-        text-decoration: none;
-        display: block;
-        width: 100%;
-        font-size: 15px;
-        font-weight: 500;
-        line-height: 1.3;
-    }
-    
-    .shop-categories-list li:hover {
-        background: #f2f2f2;
-    }
-    
-    .category-title {
-        margin-bottom: 15px;
-        font-size: 16px;
-        font-weight: 600;
-        line-height: 1.2;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-right: -15px;
-        margin-left: -15px;
-        align-items: stretch;
-    }
-    
-    .col-md-3 {
-        flex: 0 0 25%;
-        max-width: 25%;
-        padding-right: 15px;
-        padding-left: 15px;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .col-md-9 {
-        flex: 0 0 75%;
-        max-width: 75%;
-        padding-right: 15px; 
-        padding-left: 15px;
-    }
-
-    .shop-banner-box {
-        height: 100%;
-    }
-
-    .shop-banner-slider {
-        height: 100%;
-    }
-
-    .swiper-wrapper {
-        height: 100%;
-    }
-
-    .swiper-slide {
-        height: 100%;
-    }
-
-    .swiper-slide img {
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* Ajuste dinâmico do espaçamento baseado na quantidade de categorias */
-    .shop-categories-list[data-items="1"] li { padding: 20px 12px; }
-    .shop-categories-list[data-items="2"] li { padding: 15px 12px; }
-    .shop-categories-list[data-items="3"] li { padding: 12px 12px; }
-    .shop-categories-list[data-items="4"] li { padding: 10px 12px; }
-    .shop-categories-list[data-items="5"] li { padding: 8px 12px; }
-    .shop-categories-list[data-items="6"] li { padding: 7px 12px; }
-    .shop-categories-list[data-items="7"] li { padding: 6px 12px; }
-    .shop-categories-list[data-items="8"] li { padding: 5px 12px; }
-    .shop-categories-list[data-items="9"] li { padding: 4px 12px; }
-    .shop-categories-list[data-items="10"] li { padding: 3px 12px; }
 }
 
 /* Estilos para o Carrossel de Produtos em Destaque */
@@ -569,19 +377,21 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     width: 100%;
     border-radius: 12px;
     overflow: hidden;
+    height: 300px; /* Altura fixa para leaderboard - ainda mais aumentada */
 }
 
 .shop-banner-slider .swiper-wrapper {
-    height: auto;
+    height: 100%;
 }
 
 .shop-banner-slider .swiper-slide {
-    height: auto;
+    height: 100%;
 }
 
 .shop-banner-slider .swiper-slide img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: fill; /* Preenche toda a área, pode cortar topo/baixo mas mantém laterais */
     display: block;
     border-radius: 12px;
 }
@@ -616,6 +426,10 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
 }
 
 @media (max-width: 767px) {
+    .shop-banner-slider {
+        height: 180px; /* Altura menor para mobile - ainda mais aumentada */
+    }
+    
     .shop-banner-slider .swiper-button-next,
     .shop-banner-slider .swiper-button-prev {
         width: 35px;
@@ -628,14 +442,22 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     }
 }
 
+@media (min-width: 768px) and (max-width: 991px) {
+    .shop-banner-slider {
+        height: 220px; /* Altura média para tablets - ainda mais aumentada */
+    }
+}
+
+@media (min-width: 992px) {
+    .shop-banner-slider {
+        height: 300px; /* Altura para desktop - ainda mais aumentada */
+    }
+}
+
 /* Estilos para Desktop */
 @media (min-width: 768px) {
     .custom-shop-header {
         padding-top: 20px !important;
-    }
-
-    .shop-categories-box {
-        margin-top: 10px;
     }
 
     .shop-banner-box {
@@ -648,30 +470,11 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
     .custom-shop-header {
         padding-top: 5px !important;
     }
-    
-    .shop-categories-box {
-        display: none;
-    }
-    
-    .mobile-categories-select {
-        width: 100%;
-        margin-bottom: 5px;
-    }
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const categoryTitle = document.querySelector('.category-title');
-    const categoryList = document.querySelector('.shop-categories-list');
-    
-    if (categoryTitle && categoryList) {
-        categoryTitle.addEventListener('click', function() {
-            this.classList.toggle('active');
-            categoryList.classList.toggle('active');
-        });
-    }
-
     // Inicializa o Swiper para produtos em destaque
     const featuredProductsSlider = new Swiper('.featured-products-slider', {
         slidesPerView: 2,
@@ -719,12 +522,6 @@ document.addEventListener('DOMContentLoaded', function() {
             prevEl: '.shop-banner-slider .swiper-button-prev',
         }
     });
-
-    // Adiciona o atributo data-items baseado na quantidade de categorias
-    if (categoryList) {
-        const items = categoryList.querySelectorAll('li').length;
-        categoryList.setAttribute('data-items', items);
-    }
 });
 </script>
 <?php } ?>

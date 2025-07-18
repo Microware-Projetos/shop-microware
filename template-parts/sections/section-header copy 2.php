@@ -1,19 +1,6 @@
 <?php
 $storebiz_hs_nav_search  = get_theme_mod('hs_nav_search','1');
 $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
-$storebiz_show_cart      = get_theme_mod('hs_nav_cart','1');
-
-
-// Verificação de segurança para WooCommerce
-if (!class_exists('WooCommerce')) {
-    $storebiz_show_cart = '0';
-}
-
-// Garantir que o WooCommerce carregue os scripts necessários
-if (class_exists('WooCommerce')) {
-    wp_enqueue_script('wc-add-to-cart');
-    wp_enqueue_script('woocommerce');
-}
 ?>
 
 <header id="site-header" class="site-header bg-light border-bottom py-2">
@@ -22,33 +9,19 @@ if (class_exists('WooCommerce')) {
         <div class="d-none d-lg-flex justify-content-between align-items-center">
             <!-- Logo Desktop -->
             <div class="site-branding">
-                <div class="logo-container d-flex align-items-center gap-2">
-                    <!-- Logo fixo da Microware -->
-                    <div class="fixed-logo">
-                        <a href="<?php echo esc_url(home_url('/')); ?>">
-                            <img src="<?php echo esc_url(get_site_url() . '/wp-content/uploads/logo-microware.png'); ?>" alt="Microware" class="fixed-logo-img" style="max-height: 40px; width: auto;">
-                        </a>
-                    </div>
-                    
-                    <!-- Logo escolhido pelo usuário -->
-                    <?php if (has_custom_logo()) : ?>
-                        <?php 
-                        $custom_logo_id = get_theme_mod('custom_logo');
-                        $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
-                        ?>
-                        <div class="custom-logo-wrapper">
-                            <a href="<?php echo esc_url(home_url('/')); ?>">
-                                <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo" style="max-height: 40px; width: auto;">
-                            </a>
-                        </div>
-                    <?php else : ?>
-                        <div class="custom-logo-wrapper">
-                            <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
-                                <?php bloginfo('name'); ?>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-                </div>
+                <?php if (has_custom_logo()) : ?>
+                    <?php 
+                    $custom_logo_id = get_theme_mod('custom_logo');
+                    $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                    ?>
+                    <a href="<?php echo esc_url(home_url('/')); ?>">
+                        <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo" style="max-height: 50px; width: auto;">
+                    </a>
+                <?php else : ?>
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
+                        <?php bloginfo('name'); ?>
+                    </a>
+                <?php endif; ?>
             </div>
 
             <!-- Search Desktop -->
@@ -79,14 +52,9 @@ ou cadastre-se' : 'Minha Conta'; ?>
                     <div class="cart-wrapper position-relative">
                         <a href="<?php echo wc_get_cart_url(); ?>" class="text-dark position-relative">
                             <i class="fa fa-shopping-cart fa-lg"></i>
-                            <?php 
-                            $count = 0;
-                            if (function_exists('WC') && WC()->cart) {
-                                $count = WC()->cart->get_cart_contents_count();
-                            }
-                            ?>
+                            <?php $count = WC()->cart->get_cart_contents_count(); ?>
                             <?php if ($count > 0) : ?>
-                                <span class="badge bg-danger">
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     <?php echo esc_html($count); ?>
                                 </span>
                             <?php endif; ?>
@@ -114,65 +82,30 @@ ou cadastre-se' : 'Minha Conta'; ?>
 
                 <!-- Logo Mobile (Centro) -->
                 <div class="site-branding-mobile text-center">
-                    <div class="logo-container-mobile d-flex align-items-center justify-content-center gap-2">
-                        <!-- Logo fixo da Microware -->
-                        <div class="fixed-logo-mobile">
-                            <a href="<?php echo esc_url(home_url('/')); ?>">
-                                <img src="<?php echo esc_url(get_site_url() . '/wp-content/uploads/logo-microware.png'); ?>" alt="Microware" class="fixed-logo-img-mobile" style="max-height: 35px; width: auto;">
-                            </a>
-                        </div>
-                        
-                        <!-- Logo escolhido pelo usuário -->
-                        <?php if (has_custom_logo()) : ?>
-                            <?php 
-                            $custom_logo_id = get_theme_mod('custom_logo');
-                            $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
-                            ?>
-                            <div class="custom-logo-wrapper-mobile">
-                                <a href="<?php echo esc_url(home_url('/')); ?>" class="d-inline-block">
-                                    <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo-mobile" style="max-height: 35px; width: auto;">
-                                </a>
-                            </div>
-                        <?php else : ?>
-                            <div class="custom-logo-wrapper-mobile">
-                                <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-5">
-                                    <?php bloginfo('name'); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <!-- Ícones da Direita (Conta + Carrinho) -->
-                <div class="d-flex align-items-center gap-2">
-                    <!-- Ícone de Conta -->
-                    <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
-                        <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="mobile-account-link">
-                            <i class="fa fa-user fa-lg"></i>
-                            <span class="mobile-account-text d-none">
-                                <?php echo (!is_user_logged_in()) ? 'Entrar' : 'Minha Conta'; ?>
-                            </span>
+                    <?php if (has_custom_logo()) : ?>
+                        <?php 
+                        $custom_logo_id = get_theme_mod('custom_logo');
+                        $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                        ?>
+                        <a href="<?php echo esc_url(home_url('/')); ?>" class="d-inline-block">
+                            <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo-mobile" style="max-height: 55px; width: auto;">
                         </a>
-                    <?php endif; ?>
-
-                    <!-- Ícone do Carrinho -->
-                    <?php if (class_exists('WooCommerce') && $storebiz_show_cart == '1') : ?>
-                        <a href="<?php echo wc_get_cart_url(); ?>" class="mobile-cart-link">
-                            <i class="fa fa-shopping-cart fa-lg"></i>
-                            <?php 
-                            $count = 0;
-                            if (function_exists('WC') && WC()->cart) {
-                                $count = WC()->cart->get_cart_contents_count();
-                            }
-                            ?>
-                            <?php if ($count > 0) : ?>
-                                <span class="mobile-cart-badge">
-                                    <?php echo esc_html($count); ?>
-                                </span>
-                            <?php endif; ?>
+                    <?php else : ?>
+                        <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
+                            <?php bloginfo('name'); ?>
                         </a>
                     <?php endif; ?>
                 </div>
+
+                <!-- Ícone de Conta (Direita) -->
+                <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
+                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="mobile-account-link me-3">
+                        <i class="fa fa-user fa-lg"></i>
+                        <span class="mobile-account-text">
+                            <?php echo (!is_user_logged_in()) ? 'Entrar' : 'Minha Conta'; ?>
+                        </span>
+                    </a>
+                <?php endif; ?>
             </div>
             <!-- Menu Offcanvas -->
             <div id="mobileMenu" class="mobile-offcanvas">
@@ -333,78 +266,9 @@ ou cadastre-se' : 'Minha Conta'; ?>
     padding-bottom: 2.5rem;
 }
 
-/* Container dos logos */
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.logo-container-mobile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-/* Logo fixo da Microware */
-.fixed-logo {
-    flex-shrink: 0;
-}
-
-.fixed-logo a {
-    display: block;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-}
-
-.fixed-logo a:hover {
-    opacity: 0.8;
-}
-
-.fixed-logo-img {
-    max-height: 50px;
-    width: auto;
-    height: auto;
-    display: block;
-}
-
-.fixed-logo-mobile {
-    flex-shrink: 0;
-}
-
-.fixed-logo-mobile a {
-    display: block;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-}
-
-.fixed-logo-mobile a:hover {
-    opacity: 0.8;
-}
-
-.fixed-logo-img-mobile {
-    max-height: 35px;
-    width: auto;
-    height: auto;
-    display: block;
-}
-
-/* Logo customizado */
-.custom-logo-wrapper {
-    flex-shrink: 0;
-}
-
-.custom-logo-wrapper-mobile {
-    flex-shrink: 0;
-}
-
 .custom-logo {
-    max-height: 50px;
-    max-width: 180px;
+    max-height: 60px;
     width: auto;
-    height: auto;
-    display: block;
 }
 
 .search-form {
@@ -481,28 +345,6 @@ ou cadastre-se' : 'Minha Conta'; ?>
     transform: rotate(45deg);
     border-left: 1px solid #e0e0e0;
     border-top: 1px solid #e0e0e0;
-}
-
-/* Badge do carrinho desktop */
-.cart-wrapper .badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #dc3545;
-    color: white;
-    font-size: 0.7rem;
-    font-weight: bold;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    min-width: 18px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 10;
-    border: 2px solid #fff;
 }
 
 .widget_shopping_cart_content {
@@ -618,28 +460,14 @@ ou cadastre-se' : 'Minha Conta'; ?>
     }
 
     .site-branding-mobile {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: auto;
-        max-width: 200px; /* Aumentado para acomodar os dois logos */
+        text-align: center;
+        padding: 0 40px;
     }
-    
-    .logo-container-mobile {
-        gap: 0.3rem; /* Reduzir gap no mobile */
-    }
-    
-    .fixed-logo-img-mobile {
-        max-height: 30px; /* Reduzido para mobile */
-        max-width: 60px;
-    }
-    
+
     .custom-logo-mobile {
-        max-height: 30px; /* Reduzido para mobile */
-        max-width: 100px; /* Garante alinhamento no mobile */
+        max-height: 55px;
         width: auto;
-        height: auto;
-        display: block;
+        margin: 0 auto;
     }
 
     .navbar-toggler {
@@ -666,11 +494,6 @@ ou cadastre-se' : 'Minha Conta'; ?>
     .header-search-form-mobile form {
         margin: 0;
     }
-
-    /* Ajuste do container dos ícones */
-    .mobile-header-wrapper .d-flex.align-items-center.gap-2 {
-        margin-right: 0.5rem;
-    }
 }
 
 /* Remover estilos antigos que podem estar interferindo */
@@ -690,10 +513,6 @@ ou cadastre-se' : 'Minha Conta'; ?>
 
 .site-branding {
     margin-left: 6rem;
-    max-width: 180px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
 }
 
 .header-icons-gap > * {
@@ -758,7 +577,6 @@ ou cadastre-se' : 'Minha Conta'; ?>
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
-    flex: 1 1 0%;
 }
 
 .header-search-form form {
@@ -860,11 +678,6 @@ ou cadastre-se' : 'Minha Conta'; ?>
     .header-icons-gap {
         justify-content: flex-end !important;
         margin-right: 0.5rem;
-    }
-    
-    /* Ocultar texto da conta no mobile */
-    .mobile-account-text {
-        display: none !important;
     }
 }
 
@@ -1297,7 +1110,7 @@ ou cadastre-se' : 'Minha Conta'; ?>
 .mobile-account-link {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 0.5rem;
     color: #222;
     text-decoration: none;
     font-size: 1rem;
@@ -1305,8 +1118,6 @@ ou cadastre-se' : 'Minha Conta'; ?>
     padding: 0.5rem;
     border-radius: 4px;
     transition: all 0.2s ease;
-    min-width: 44px;
-    min-height: 44px;
 }
 
 .mobile-account-text {
@@ -1319,78 +1130,70 @@ ou cadastre-se' : 'Minha Conta'; ?>
     background: rgba(0, 123, 255, 0.05);
 }
 
-/* Estilos para o carrinho mobile */
-.mobile-cart-link {
-    display: flex;
-    align-items: center;
-    position: relative;
-    color: #222;
-    text-decoration: none;
-    font-size: 1rem;
-    z-index: 1200;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    margin-right: 0.5rem;
-}
-
-.mobile-cart-link:hover {
-    color: var(--bs-primary);
-    background: rgba(0, 123, 255, 0.05);
-}
-
-/* Badge do carrinho mobile */
-.mobile-cart-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #dc3545;
-    color: white;
-    font-size: 0.7rem;
-    font-weight: bold;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    min-width: 18px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 10;
-    border: 2px solid #fff;
-}
-
 @media (max-width: 360px) {
+    .mobile-account-text {
+        display: none;
+    }
+    
     .mobile-account-link {
         padding: 0.5rem;
     }
-    
-    .mobile-cart-link {
-        padding: 0.5rem;
-    }
-    
-    /* Ajustes para telas muito pequenas */
+}
+
+/* Ajuste para garantir que o logo fique centralizado mesmo com os textos */
+@media (max-width: 991px) {
     .site-branding-mobile {
-        max-width: 180px;
-    }
-    
-    .logo-container-mobile {
-        gap: 0.2rem;
-    }
-    
-    .fixed-logo-img-mobile {
-        max-height: 25px;
-        max-width: 50px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        max-width: 180px; /* Reduzido para dar mais espaço aos textos */
     }
     
     .custom-logo-mobile {
-        max-height: 25px;
-        max-width: 80px;
+        max-height: 45px;
+        width: auto;
     }
 }
 
 /* Reset e ajustes para o botão hamburger */
+.mobile-menu-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    margin-left: 10px;
+    background: none !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+    box-shadow: none !important;
+}
+
+.mobile-menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background: none;
+}
+
+.mobile-menu-icon span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    margin: 2px 0;
+    background: #222;
+    border-radius: 2px;
+    transition: all 0.3s;
+    box-shadow: none;
+}
+
+/* Remover qualquer estilo que possa estar sendo herdado */
 .mobile-menu-btn:focus,
 .mobile-menu-btn:active,
 .mobile-menu-btn:hover {
@@ -1401,272 +1204,40 @@ ou cadastre-se' : 'Minha Conta'; ?>
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Variável para controlar atualizações e evitar loops
-    var isUpdating = false;
-    var updateTimeout = null;
-
-    // Função para atualizar contadores com proteção contra loops
-    function safeUpdateCartCounters() {
-        if (isUpdating) {
-            console.log('Atualização já em andamento, ignorando...');
-            return;
-        }
-        
-        isUpdating = true;
-        updateCartCounters();
-        
-        // Resetar flag após 500ms
-        setTimeout(function() {
-            isUpdating = false;
-        }, 500);
-    }
-
-    // Função simplificada para atualizar contadores
-    function updateCartCounters() {
-        var desktopCartBadge = document.querySelector('.cart-wrapper .badge');
-        var mobileCartBadge = document.querySelector('.mobile-cart-badge');
-        
-        // Abordagem mais direta - usar o endpoint nativo do WooCommerce
-        if (typeof wc_add_to_cart_params !== 'undefined') {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', wc_add_to_cart_params.wc_ajax_url.toString().replace('%%endpoint%%', 'get_refreshed_fragments'), true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        try {
-                            var data = JSON.parse(xhr.responseText);
-                            var cartCount = 0;
-                            
-                            // Tentar extrair do fragmento
-                            if (data.fragments && data.fragments['div.widget_shopping_cart_content']) {
-                                var tempDiv = document.createElement('div');
-                                tempDiv.innerHTML = data.fragments['div.widget_shopping_cart_content'];
-                                
-                                // Verificar se há mensagem de carrinho vazio
-                                var emptyMessage = tempDiv.querySelector('.woocommerce-mini-cart__empty-message');
-                                if (!emptyMessage) {
-                                    // Contar itens
-                                    var items = tempDiv.querySelectorAll('.woocommerce-mini-cart-item');
-                                    cartCount = items.length;
-                                }
-                            }
-                            
-                            // Se não conseguiu extrair do fragmento, tentar método alternativo
-                            if (cartCount === 0) {
-                                // Fazer uma requisição para obter o número de itens diretamente
-                                var countXhr = new XMLHttpRequest();
-                                countXhr.open('POST', wc_add_to_cart_params.wc_ajax_url.toString().replace('%%endpoint%%', 'get_cart_count'), true);
-                                countXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                                
-                                countXhr.onreadystatechange = function() {
-                                    if (countXhr.readyState === 4 && countXhr.status === 200) {
-                                        try {
-                                            var countData = JSON.parse(countXhr.responseText);
-                                            if (countData && countData.count !== undefined) {
-                                                cartCount = parseInt(countData.count);
-                                            }
-                                        } catch (e) {
-                                            console.log('Erro ao parsear dados do carrinho:', e);
-                                        }
-                                        updateBadges(cartCount);
-                                    }
-                                };
-                                
-                                countXhr.send();
-                            } else {
-                                updateBadges(cartCount);
-                            }
-                            
-                        } catch (e) {
-                            console.log('Erro ao processar resposta do carrinho:', e);
-                            updateBadges(0);
-                        }
-                    } else {
-                        console.log('Erro na requisição do carrinho:', xhr.status);
-                        updateBadges(0);
-                    }
-                }
-            };
-            
-            xhr.send();
-        } else {
-            // Fallback - tentar obter do DOM atual
-            var currentItems = document.querySelectorAll('.woocommerce-mini-cart-item');
-            var cartCount = currentItems.length;
-            updateBadges(cartCount);
-        }
-        
-        // Função para atualizar os badges
-        function updateBadges(cartCount) {
-            console.log('Atualizando badges - Itens no carrinho:', cartCount);
-            
-            // Atualizar badge desktop
-            if (desktopCartBadge) {
-                if (cartCount > 0) {
-                    desktopCartBadge.textContent = cartCount;
-                    desktopCartBadge.style.display = 'block';
-                    console.log('Badge desktop atualizado:', cartCount);
-                } else {
-                    desktopCartBadge.style.display = 'none';
-                    console.log('Badge desktop ocultado');
-                }
-            }
-            
-            // Atualizar badge mobile
-            if (mobileCartBadge) {
-                if (cartCount > 0) {
-                    mobileCartBadge.textContent = cartCount;
-                    mobileCartBadge.style.display = 'flex';
-                    console.log('Badge mobile atualizado:', cartCount);
-                } else {
-                    mobileCartBadge.style.display = 'none';
-                    console.log('Badge mobile ocultado');
-                }
-            } else if (cartCount > 0) {
-                var mobileCartLink = document.querySelector('.mobile-cart-link');
-                if (mobileCartLink) {
-                    var newBadge = document.createElement('span');
-                    newBadge.className = 'mobile-cart-badge';
-                    newBadge.textContent = cartCount;
-                    newBadge.style.border = '2px solid #fff';
-                    mobileCartLink.appendChild(newBadge);
-                    console.log('Novo badge mobile criado:', cartCount);
-                }
-            }
-        }
-    }
-
-    // Expor função globalmente para debug
-    window.updateCartCounters = updateCartCounters;
-    window.safeUpdateCartCounters = safeUpdateCartCounters;
-
-    // Menu mobile functionality
     var btn = document.getElementById('mobileMenuBtn');
     var menu = document.getElementById('mobileMenu');
     var overlay = document.getElementById('mobileMenuOverlay');
     var closeBtn = document.querySelector('.mobile-menu-close');
     var dropdown = document.querySelector('.mobile-menu-dropdown');
-    var dropdownToggle = dropdown ? dropdown.querySelector('.dropdown-toggle') : null;
-    var submenu = dropdown ? dropdown.querySelector('.mobile-submenu') : null;
+    var dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+    var submenu = dropdown.querySelector('.mobile-submenu');
 
-    if (btn && menu && overlay) {
-        btn.addEventListener('click', function() {
-            menu.classList.add('open');
-            overlay.classList.add('active');
-        });
-    }
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', function() {
-            menu.classList.remove('open');
-            overlay.classList.remove('active');
-        });
-    }
-
-    if (overlay) {
-        overlay.addEventListener('click', function() {
-            menu.classList.remove('open');
-            overlay.classList.remove('active');
-        });
-    }
-
-    if (dropdownToggle) {
-        dropdownToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            dropdown.classList.toggle('open');
-        });
-    }
+    btn.addEventListener('click', function() {
+        menu.classList.add('open');
+        overlay.classList.add('active');
+    });
+    closeBtn.addEventListener('click', function() {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+    overlay.addEventListener('click', function() {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+    dropdownToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        dropdown.classList.toggle('open');
+    });
 
     // Adicionar funcionalidade para submenu mobile
     var submenuItems = document.querySelectorAll('.mobile-submenu-item');
     submenuItems.forEach(function(item) {
         var toggle = item.querySelector('.mobile-submenu-toggle');
-        if (toggle) {
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                item.classList.toggle('open');
-            });
-        }
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            item.classList.toggle('open');
+        });
     });
-
-    // Atualizar carrinho quando a página carrega
-    setTimeout(function() {
-        safeUpdateCartCounters();
-    }, 1000);
-
-    // Listener para hover do carrinho (quando o modal aparece)
-    var cartWrapper = document.querySelector('.cart-wrapper');
-    if (cartWrapper) {
-        cartWrapper.addEventListener('mouseenter', function() {
-            console.log('Mouse entrou no carrinho - atualizando contador...');
-            safeUpdateCartCounters();
-        });
-    }
-
-    // Listener para clique no carrinho mobile
-    var mobileCartLink = document.querySelector('.mobile-cart-link');
-    if (mobileCartLink) {
-        mobileCartLink.addEventListener('click', function() {
-            console.log('Carrinho mobile clicado - atualizando contador...');
-            setTimeout(function() {
-                safeUpdateCartCounters();
-            }, 100);
-        });
-    }
-
-    // Escutar eventos do WooCommerce
-    if (typeof jQuery !== 'undefined') {
-        // Evento quando fragmentos são atualizados
-        jQuery(document.body).on('wc_fragments_refreshed', function() {
-            console.log('Fragmentos atualizados - atualizando contador...');
-            safeUpdateCartCounters();
-        });
-        
-        // Evento quando produto é adicionado ao carrinho
-        jQuery(document.body).on('added_to_cart', function(event, fragments, cart_hash, button) {
-            console.log('Produto adicionado ao carrinho - atualizando contador...');
-            setTimeout(function() {
-                safeUpdateCartCounters();
-            }, 500);
-        });
-        
-        // Evento quando produto é removido do carrinho
-        jQuery(document.body).on('removed_from_cart', function(event, fragments, cart_hash, button) {
-            console.log('Produto removido do carrinho - atualizando contador...');
-            setTimeout(function() {
-                safeUpdateCartCounters();
-            }, 500);
-        });
-        
-        // Evento quando totais do carrinho são atualizados
-        jQuery(document.body).on('updated_cart_totals', function(event, fragments, cart_hash) {
-            console.log('Totais do carrinho atualizados - atualizando contador...');
-            safeUpdateCartCounters();
-        });
-    } else {
-        // Fallback para quando jQuery não está disponível
-        document.addEventListener('added_to_cart', function(event) {
-            console.log('Produto adicionado (fallback) - atualizando contador...');
-            setTimeout(function() {
-                safeUpdateCartCounters();
-            }, 500);
-        });
-        
-        document.addEventListener('removed_from_cart', function(event) {
-            console.log('Produto removido (fallback) - atualizando contador...');
-            setTimeout(function() {
-                safeUpdateCartCounters();
-            }, 500);
-        });
-    }
-
-    // Função para forçar atualização manual (útil para debug)
-    window.forceCartUpdate = function() {
-        console.log('Forçando atualização manual do carrinho...');
-        safeUpdateCartCounters();
-    };
 });
 </script>

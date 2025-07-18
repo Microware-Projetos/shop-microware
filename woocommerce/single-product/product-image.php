@@ -37,13 +37,23 @@ $wrapper_classes   = apply_filters(
 		'images',
 	)
 );
+
+// Verifica se existe imagem externa
+$external_image = get_post_meta($product->get_id(), '_external_image_url', true);
 ?>
 <div class="<?php echo esc_attr( implode( ' ', array_map( 'sanitize_html_class', $wrapper_classes ) ) ); ?>" data-columns="<?php echo esc_attr( $columns ); ?>" style="opacity: 0; transition: opacity .25s ease-in-out;">
 	<div class="woocommerce-product-gallery__wrapper">
 		<?php
-		if ( $post_thumbnail_id ) {
+		if ( $external_image ) {
+			// Usa a imagem externa se disponível
+			$html = sprintf( '<div class="woocommerce-product-gallery__image">' );
+			$html .= sprintf( '<img src="%s" alt="%s" class="wp-post-image" />', esc_url( $external_image ), esc_attr( $product->get_name() ) );
+			$html .= '</div>';
+		} elseif ( $post_thumbnail_id ) {
+			// Usa a imagem padrão do WooCommerce se não houver imagem externa
 			$html = wc_get_gallery_image_html( $post_thumbnail_id, true );
 		} else {
+			// Usa placeholder se não houver nenhuma imagem
 			$wrapper_classname = $product->is_type( ProductType::VARIABLE ) && ! empty( $product->get_available_variations( 'image' ) ) ?
 				'woocommerce-product-gallery__image woocommerce-product-gallery__image--placeholder' :
 				'woocommerce-product-gallery__image--placeholder';

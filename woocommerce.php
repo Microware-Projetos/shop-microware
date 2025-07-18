@@ -20,23 +20,8 @@ get_header();
         }
         ?>
         <div class="row gy-lg-0 gy-5 wow fadeInUp">
-            <?php 
-            // Tenta renderizar o shortcode e verifica se retorna conteúdo
-            $filter_content = do_shortcode('[wpf-filters id=1]');
-            $has_filters = !empty(trim($filter_content));
-            
-            if ($has_filters) : ?>
-            <!-- Coluna do filtro (visível apenas em desktop) -->
-            <div class="col-lg-3 desktop-filters d-none d-lg-block">
-                <?php echo $filter_content; ?>
-            </div>
-
-            <!-- Coluna de conteúdo dos produtos -->
-            <div class="col-lg-9 col-12">
-            <?php else : ?>
-            <!-- Coluna de conteúdo dos produtos (largura total quando não há filtros) -->
+            <!-- Coluna de conteúdo dos produtos (largura total) -->
             <div class="col-12">
-            <?php endif; ?>
                 <?php
                 // Exibe os produtos em destaque acima do loop normal
                 if ( function_exists( 'woocommerce_featured_product' ) ) {
@@ -53,16 +38,6 @@ get_header();
         </div>  
     </div>
 </section>
-
-<!-- Adiciona os estilos necessários -->
-<style>
-    @media (max-width: 991.98px) {
-        /* Esconde os filtros originais em mobile */
-        .desktop-filters {
-            display: none !important;
-        }
-    }
-</style>
 
 <!-- Adiciona o script do Bootstrap (caso ainda não esteja incluído) -->
 <script>

@@ -217,7 +217,7 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start; /* Agrupa as categorias no topo */
+        justify-content: space-between; /* Distribui o espaço igualmente */
     }
     
     .shop-categories-list li {
@@ -229,6 +229,7 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
         transition: background 0.2s;
         margin-bottom: 4px;
         list-style: none;
+        flex: 1; /* Faz cada item crescer igualmente */
         display: flex;
         align-items: center;
     }
