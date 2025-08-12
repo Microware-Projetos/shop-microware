@@ -124,13 +124,14 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
     min-height: 44px;
 }
 .woocommerce-mini-cart__buttons .btn-primary {
-    background: #dc3545;
-    color: #fff;
-    border: none;
+    background: var(--bs-primary) !important;
+    color: #fff !important;
+    border: none !important;
 }
 .woocommerce-mini-cart__buttons .btn-primary:hover {
-    background: #b71c1c;
-    color: #fff;
+    background: var(--bs-primary) !important;
+    opacity: 0.9 !important;
+    color: #fff !important;
 }
 </style>
 

@@ -248,12 +248,15 @@ add_action('template_redirect', function () {
     $is_super_admin = is_super_admin($user_id);
     $is_admin_user = in_array('administrator', $user->roles);
 
-    // Se não estiver logado, redireciona sempre para /login (no site principal)
+    // Permitir acesso livre para a página /login (ou outra que você definir)
+    $allowed_paths = ['/wp-login.php', '/login'];
+
+    // Se não estiver logado, redireciona para /login (customizada) no site principal
     if (!is_user_logged_in() && !is_admin()) {
         if (defined('DOING_AJAX') && DOING_AJAX) return;
 
-        if ($current_path !== '/wp-login.php') {
-            wp_redirect(network_home_url('/wp-login.php'));
+        if (!in_array($current_path, $allowed_paths)) {
+            wp_redirect(network_home_url('/login')); // aqui para /login ao invés de /wp-login.php
             exit;
         }
     }
@@ -267,13 +270,13 @@ add_action('template_redirect', function () {
             wp_redirect($first_site->siteurl);
             exit;
         } else {
-            wp_redirect(network_home_url('/wp-login.php'));
+            wp_redirect(network_home_url('/login'));
             exit;
         }
     }
 
     // Se estiver logado e acessar /login no site principal, redireciona pro primeiro site associado
-    if (is_user_logged_in() && $current_path === '/wp-login.php' && is_main_site()) {
+    if (is_user_logged_in() && $current_path === '/login' && is_main_site()) {
         $sites = get_blogs_of_user($user_id);
 
         if (!empty($sites)) {
@@ -286,6 +289,7 @@ add_action('template_redirect', function () {
         }
     }
 });
+
 
 
 
@@ -375,7 +379,7 @@ add_action('admin_menu', function() {
         'criador-lojas', // Slug do menu
         function() {
             // Redireciona para o link externo
-            wp_redirect('http://lojas.microware.com.br:14322');
+            wp_redirect('http://shop.microware.com.br:14322');
             exit;
         },
         'dashicons-admin-site', // Ícone personalizado
@@ -396,7 +400,7 @@ add_action('admin_menu', function() {
             'criador-lojas-network', // Slug do menu
             function() {
                 // Redireciona para o link externo
-                wp_redirect('http://lojas.microware.com.br:14322');
+                wp_redirect('http://shop.microware.com.br:14322');
                 exit;
             }
         );
@@ -415,7 +419,7 @@ add_action('admin_menu', function() {
         'criador-lojas-appearance', // Slug do menu
         function() {
             // Redireciona para o link externo
-            wp_redirect('http://lojas.microware.com.br:14322');
+            wp_redirect('http://shop.microware.com.br:14322');
             exit;
         }
     );
@@ -436,7 +440,7 @@ add_action('admin_bar_menu', function($wp_admin_bar) {
             'parent' => 'my-sites-super-admin',
             'id'     => 'criador-lojas-admin-bar',
             'title'  => '<span class="ab-icon dashicons dashicons-admin-site" style="margin-right: 5px;"></span>Criador de Lojas',
-            'href'   => 'http://lojas.microware.com.br:14322',
+            'href'   => 'http://shop.microware.com.br:14322',
             'meta'   => array(
                 'target' => '_blank',
                 'title'  => 'Abrir Criador de Lojas em nova aba'
@@ -449,7 +453,7 @@ add_action('admin_bar_menu', function($wp_admin_bar) {
         $wp_admin_bar->add_node(array(
             'id'     => 'criador-lojas-main',
             'title'  => '<span class="ab-icon dashicons dashicons-admin-site" style="margin-right: 5px;"></span>Criador de Lojas',
-            'href'   => 'http://lojas.microware.com.br:14322',
+            'href'   => 'http://shop.microware.com.br:14322',
             'meta'   => array(
                 'target' => '_blank',
                 'title'  => 'Abrir Criador de Lojas em nova aba'
@@ -484,7 +488,7 @@ add_action('customize_register', function($wp_customize) {
     
     $wp_customize->add_control('criador_lojas_button', array(
         'label'       => 'Abrir Sistema',
-        'description' => '<div style="margin-top: 15px;"><a href="http://lojas.microware.com.br:14322" target="_blank" class="button button-primary" style="width: 100%; text-align: center; padding: 12px; font-size: 14px; font-weight: 600;"><span class="dashicons dashicons-admin-site" style="margin-right: 8px; font-size: 16px;"></span>🚀 Abrir Criador de Lojas</a></div><p style="margin-top: 10px; font-style: italic; color: #666;">Clique no botão acima para acessar o sistema de criação de lojas em uma nova aba</p>',
+        'description' => '<div style="margin-top: 15px;"><a href="http://shop.microware.com.br:14322" target="_blank" class="button button-primary" style="width: 100%; text-align: center; padding: 12px; font-size: 14px; font-weight: 600;"><span class="dashicons dashicons-admin-site" style="margin-right: 8px; font-size: 16px;"></span>🚀 Abrir Criador de Lojas</a></div><p style="margin-top: 10px; font-style: italic; color: #666;">Clique no botão acima para acessar o sistema de criação de lojas em uma nova aba</p>',
         'section'     => 'criador_lojas_section',
         'type'        => 'text',
         'input_attrs' => array(
@@ -572,6 +576,56 @@ add_action('admin_head', function() {
         #adminmenu .wp-has-current-submenu .wp-menu-image.dashicons-admin-site {
             transform: scale(1.1);
         }
+
+        .term-description{
+          display: none;
+        }
     </style>
     <?php
 });
+
+function customizer_logos_position($wp_customize) {
+    $wp_customize->add_section('logos_position_section', array(
+        'title' => 'Posição dos Logos do Banner',
+        'priority' => 30,
+    ));
+
+    $wp_customize->add_setting('logo1_x', array(
+        'default' => 158,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_setting('logo2_x', array(
+        'default' => 35,
+        'sanitize_callback' => 'absint',
+    ));
+
+    $wp_customize->add_control('logo1_x', array(
+        'label' => 'Posição X do Logo do Cliente',
+        'section' => 'logos_position_section',
+        'type' => 'range',
+        'input_attrs' => array(
+            'min' => 0,
+            'max' => 500,
+            'step' => 1,
+        ),
+    ));
+    $wp_customize->add_control('logo2_x', array(
+        'label' => 'Posição X do Logo da Microware',
+        'section' => 'logos_position_section',
+        'type' => 'range',
+        'input_attrs' => array(
+            'min' => 0,
+            'max' => 500,
+            'step' => 1,
+        ),
+    ));
+}
+add_action('customize_register', 'customizer_logos_position');
+
+add_filter('woocommerce_placeholder_img_src', 'custom_placeholder_conditional');
+function custom_placeholder_conditional($image_url) {
+    if (is_product()) {
+        return get_stylesheet_directory_uri() . '/assets/images/product_holder.svg';
+    }
+    return $image_url;
+}

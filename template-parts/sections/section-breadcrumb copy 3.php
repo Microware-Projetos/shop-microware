@@ -141,17 +141,9 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
                                         $logo_cliente_2 = ''; // Fallback para texto do site
                                     }
                                 
-                                    // Pega os valores do Customizer (ou usa padrão)
-                                    $logo1_x = get_theme_mod('logo1_x', 158);
-                                    $logo2_x = get_theme_mod('logo2_x', 35);
-
-                                    // Substitui os placeholders dos logos
+                                    // Substitui os placeholders
                                     $svg_content = str_replace('{{logo_cliente_1}}', $logo_cliente_2, $svg_content);
                                     $svg_content = str_replace('{{logo_cliente_2}}', $logo_cliente_1, $svg_content);
-
-                                    // Substitui as posições X no SVG
-                                    $svg_content = preg_replace('/<image(.*?)x="\\d+"(.*?)y="151"/','<image$1x="' . $logo1_x . '"$2y="151"', $svg_content, 1);
-                                    $svg_content = preg_replace('/<image(.*?)x="\\d+"(.*?)y="150"/','<image$1x="' . $logo2_x . '"$2y="150"', $svg_content, 1);
                                 
                                     // Imprime o SVG inline (mantém vetorial e responsivo)
                                     echo '<div style="width: 100%; height: auto;">' . $svg_content . '</div>';

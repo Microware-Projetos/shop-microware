@@ -70,7 +70,7 @@ if ($count > 0) {
 						the_post_thumbnail('', array('class' => 'rounded-image'));
 					} else {
 						// fallback para a imagem placeholder do WooCommerce, agora usando SVG com logo do cliente
-						$svg_path = WP_CONTENT_DIR . '/uploads/product_holder.svg';
+						$svg_path = WP_CONTENT_DIR . '/uploads/banner-logos.svg';
 						if (file_exists($svg_path)) {
 							$svg_content = file_get_contents($svg_path);
 							// Pegue a logo do cliente (exemplo: custom logo do tema)
@@ -84,17 +84,7 @@ if ($count > 0) {
 							// Substitui o placeholder no SVG
 							$svg_content = str_replace('{{logo_cliente_1}}', $logo_cliente_1, $svg_content);
 							// Exibe o SVG inline
-							echo '<div class="svg-product-holder-wrapper">' . $svg_content . '</div>';
-							echo '<style>
-							.svg-product-holder-wrapper svg {
-								width: 100% !important;
-								height: auto !important;
-								max-width: 100% !important;
-								max-height: 220px;
-								display: block;
-								margin: 0 auto;
-							}
-							</style>';
+							echo '<div style="width: 100%; height: auto;">' . $svg_content . '</div>';
 						} else {
 							// Fallback caso o SVG não exista
 							$placeholder_image = get_site_url() . '/wp-content/uploads/product_holder.svg';

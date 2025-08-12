@@ -2,8 +2,6 @@
 $storebiz_hs_nav_search  = get_theme_mod('hs_nav_search','1');
 $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
 $storebiz_show_cart      = get_theme_mod('hs_nav_cart','1');
-$storebiz_header_bg_color = get_theme_mod('header_background_color', '#f8f9fa'); // Cor de fundo personalizável
-$storebiz_account_link_color = get_theme_mod('header_account_link_color', '#222222'); // Cor do link de conta
 
 
 // Verificação de segurança para WooCommerce
@@ -18,7 +16,7 @@ if (class_exists('WooCommerce')) {
 }
 ?>
 
-<header id="site-header" class="site-header border-bottom py-2" style="background-color: <?php echo esc_attr($storebiz_header_bg_color); ?> !important;">
+<header id="site-header" class="site-header bg-light border-bottom py-2">
     <div class="container">
         <!-- Estrutura Desktop -->
         <div class="d-none d-lg-flex justify-content-between align-items-center">
@@ -68,9 +66,9 @@ if (class_exists('WooCommerce')) {
             <div class="d-flex align-items-center gap-7 header-icons-gap">
                 <!-- Conta -->
                 <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
-                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="text-dark d-flex align-items-center header-link" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
-                        <i class="fa fa-user fa-lg" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
-                        <span class="d-none d-lg-inline" style="white-space: nowrap; color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="text-dark d-flex align-items-center header-link">
+                        <i class="fa fa-user fa-lg"></i>
+                        <span class="d-none d-lg-inline" style="white-space: nowrap;">
                             <?php echo (!is_user_logged_in()) ? 'olá, faça seu login
 ou cadastre-se' : 'Minha Conta'; ?>
                         </span>
@@ -79,8 +77,8 @@ ou cadastre-se' : 'Minha Conta'; ?>
 
                 <?php if (class_exists('WooCommerce') && $storebiz_show_cart == '1') : ?>
                     <div class="cart-wrapper position-relative">
-                        <a href="<?php echo wc_get_cart_url(); ?>" class="text-dark position-relative" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
-                            <i class="fa fa-shopping-cart fa-lg" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
+                        <a href="<?php echo wc_get_cart_url(); ?>" class="text-dark position-relative">
+                            <i class="fa fa-shopping-cart fa-lg"></i>
                             <?php 
                             $count = 0;
                             if (function_exists('WC') && WC()->cart) {
@@ -149,9 +147,9 @@ ou cadastre-se' : 'Minha Conta'; ?>
                 <div class="d-flex align-items-center gap-2">
                     <!-- Ícone de Conta -->
                     <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
-                        <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="mobile-account-link" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
-                            <i class="fa fa-user fa-lg" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
-                            <span class="mobile-account-text d-none" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                        <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="mobile-account-link">
+                            <i class="fa fa-user fa-lg"></i>
+                            <span class="mobile-account-text d-none">
                                 <?php echo (!is_user_logged_in()) ? 'Entrar' : 'Minha Conta'; ?>
                             </span>
                         </a>
@@ -159,8 +157,8 @@ ou cadastre-se' : 'Minha Conta'; ?>
 
                     <!-- Ícone do Carrinho -->
                     <?php if (class_exists('WooCommerce') && $storebiz_show_cart == '1') : ?>
-                        <a href="<?php echo wc_get_cart_url(); ?>" class="mobile-cart-link" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
-                            <i class="fa fa-shopping-cart fa-lg" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
+                        <a href="<?php echo wc_get_cart_url(); ?>" class="mobile-cart-link">
+                            <i class="fa fa-shopping-cart fa-lg"></i>
                             <?php 
                             $count = 0;
                             if (function_exists('WC') && WC()->cart) {
@@ -582,24 +580,22 @@ ou cadastre-se' : 'Minha Conta'; ?>
 }
 
 .widget_shopping_cart_content .woocommerce-mini-cart .buttons .checkout {
-    background: var(--bs-primary) !important;
-    color: white !important;
+    background: #28a745;
+    color: white;
 }
 
 .widget_shopping_cart_content .woocommerce-mini-cart .buttons .checkout:hover {
-    background: var(--bs-primary) !important;
-    opacity: 0.9 !important;
+    background: #218838;
 }
 
 .widget_shopping_cart_content .woocommerce-mini-cart .buttons .view_cart {
-    background: var(--bs-primary) !important;
-    color: white !important;
-    border: 1px solid var(--bs-primary) !important;
+    background: #f8f9fa;
+    color: #212529;
+    border: 1px solid #dee2e6;
 }
 
 .widget_shopping_cart_content .woocommerce-mini-cart .buttons .view_cart:hover {
-    background: var(--bs-primary) !important;
-    opacity: 0.9 !important;
+    background: #e9ecef;
 }
 
 /* Estilos Mobile */

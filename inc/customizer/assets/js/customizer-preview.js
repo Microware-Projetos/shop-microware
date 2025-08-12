@@ -50,6 +50,38 @@
 	
 	
 	/**
+	 * Header Background Color
+	 */
+	wp.customize( 'header_background_color', function( value ) {
+		value.bind( function( color ) {
+			jQuery( '#site-header' ).css( 'background-color', color + ' !important' );
+		} );
+	} );
+	
+	/**
+	 * Header Account Link Color
+	 */
+	wp.customize( 'header_account_link_color', function( value ) {
+		value.bind( function( color ) {
+			// Aplicar cor no link de conta desktop
+			jQuery( '.header-icons-gap a[href*="my-account"]' ).css( 'color', color + ' !important' );
+			jQuery( '.header-icons-gap a[href*="my-account"] i' ).css( 'color', color + ' !important' );
+			jQuery( '.header-icons-gap a[href*="my-account"] span' ).css( 'color', color + ' !important' );
+			
+			// Aplicar cor no link de conta mobile
+			jQuery( '.mobile-account-link' ).css( 'color', color + ' !important' );
+			jQuery( '.mobile-account-link i' ).css( 'color', color + ' !important' );
+			jQuery( '.mobile-account-link .mobile-account-text' ).css( 'color', color + ' !important' );
+			
+			// Aplicar cor no ícone do carrinho (desktop e mobile)
+			jQuery( '.cart-wrapper a' ).css( 'color', color + ' !important' );
+			jQuery( '.cart-wrapper i' ).css( 'color', color + ' !important' );
+			jQuery( '.mobile-cart-link' ).css( 'color', color + ' !important' );
+			jQuery( '.mobile-cart-link i' ).css( 'color', color + ' !important' );
+		} );
+	} );
+	
+	/**
 	 * logo_width
 	 */
 	wp.customize( 'logo_width', function( value ) {

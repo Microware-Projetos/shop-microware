@@ -156,6 +156,66 @@ function storebiz_header_settings( $wp_customize ) {
 	);
 	
 	/*=========================================
+	Header Background Color
+	=========================================*/	
+	$wp_customize->add_section(
+		'header_background_color_section',
+		array(
+			'priority'      => 3,
+			'title' 		=> __('Cor de Fundo do Header','storebiz'),
+			'panel'  		=> 'header_section',
+		)
+	);
+	
+	// Cor de fundo do header
+	$wp_customize->add_setting(
+		'header_background_color',
+		array(
+			'default'           => '#f8f9fa',
+			'capability'        => 'edit_theme_options',
+			'sanitize_callback' => 'sanitize_hex_color',
+			'transport'         => 'postMessage',
+		)
+	);
+
+	$wp_customize->add_control(
+		new WP_Customize_Color_Control(
+			$wp_customize,
+			'header_background_color',
+			array(
+				'label'       => __('Cor de Fundo do Header Principal','storebiz'),
+				'description' => __('Altere a cor de fundo da área do header (logo e busca). Não afeta o menu principal.','storebiz'),
+				'section'     => 'header_background_color_section',
+				'settings'    => 'header_background_color',
+			)
+		)
+	);
+	
+	// Cor do texto do link de conta
+	$wp_customize->add_setting(
+		'header_account_link_color',
+		array(
+			'default'           => '#222222',
+			'capability'        => 'edit_theme_options',
+			'sanitize_callback' => 'sanitize_hex_color',
+			'transport'         => 'postMessage',
+		)
+	);
+
+	$wp_customize->add_control(
+		new WP_Customize_Color_Control(
+			$wp_customize,
+			'header_account_link_color',
+			array(
+				'label'       => __('Cor do texto do link de conta','storebiz'),
+				'description' => __('Altere a cor do texto e ícone do link "Minha Conta" no header.','storebiz'),
+				'section'     => 'header_background_color_section',
+				'settings'    => 'header_account_link_color',
+			)
+		)
+	);
+	
+	/*=========================================
 	Sticky Header
 	=========================================*/	
 	$wp_customize->add_section(
