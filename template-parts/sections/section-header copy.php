@@ -1,95 +1,253 @@
 <?php
 $storebiz_hs_nav_search  = get_theme_mod('hs_nav_search','1');
 $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
+$storebiz_header_bg_color = get_theme_mod('header_background_color', '#f8f9fa'); // Cor de fundo personalizável
+$storebiz_account_link_color = get_theme_mod('header_account_link_color', '#222222'); // Cor do link de conta
 ?>
 
-<header id="site-header" class="site-header bg-success text-white">
-    <!-- Barra superior -->
-    <div class="header-top py-1 d-flex justify-content-between align-items-center px-4" style="background: #5bc24e;">
-        <div>
-            <i class="fa fa-car"></i>
-            <span>Frete grátis para pedidos acima de R$99</span>
-        </div>
-        <div class="d-flex align-items-center gap-3">
-            <a href="#" class="text-white"><i class="fa fa-user"></i> Minha Conta</a>
-            <a href="#" class="text-white"><i class="fa fa-heart"></i> Wishlist</a>
-            <a href="#" class="text-white"><i class="fa fa-truck"></i> Entrega</a>
-            <a href="#" class="text-white"><i class="fa fa-question-circle"></i> Ajuda</a>
-        </div>
-    </div>
-    <!-- Linha principal -->
-    <div class="header-main d-flex justify-content-between align-items-center py-3 px-4" style="background: #5bc24e;">
-        <!-- Logo -->
-        <div class="site-branding">
-            <?php if (has_custom_logo()) : ?>
-                <?php 
-                $custom_logo_id = get_theme_mod('custom_logo');
-                $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
-                ?>
-                <a href="<?php echo esc_url(home_url('/')); ?>">
-                    <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo" style="max-height: 50px; width: auto;">
-                </a>
-            <?php else : ?>
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4 text-white">
-                    <?php bloginfo('name'); ?>
-                </a>
-            <?php endif; ?>
-        </div>
-        <!-- Busca -->
-        <div class="header-search-form flex-grow-1 mx-4">
-            <form method="get" action="<?php echo esc_url(home_url('/')); ?>" class="d-flex">
-                <input class="form-control" name="s" type="text" placeholder="Buscar..." style="max-width: 500px;">
-                <button class="btn btn-warning ms-2" type="submit"><i class="fa fa-search"></i></button>
-                <input type="hidden" name="post_type" value="product" />
-            </form>
-        </div>
-        <!-- Carrinho -->
-        <div>
-            <a href="<?php echo wc_get_cart_url(); ?>" class="btn btn-warning d-flex align-items-center">
-                <i class="fa fa-shopping-cart me-2"></i> Carrinho
-                <?php $count = WC()->cart->get_cart_contents_count(); ?>
-                <?php if ($count > 0) : ?>
-                    <span class="badge bg-danger ms-2"><?php echo esc_html($count); ?></span>
+<header id="site-header" class="site-header border-bottom py-2" style="background-color: <?php echo esc_attr($storebiz_header_bg_color); ?> !important;">
+    <div class="container">
+        <!-- Estrutura Desktop -->
+        <div class="d-none d-lg-flex justify-content-between align-items-center header">
+            <!-- Logo Desktop -->
+            <div class="site-branding">
+                <?php if (has_custom_logo()) : ?>
+                    <?php 
+                    $custom_logo_id = get_theme_mod('custom_logo');
+                    $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                    ?>
+                    <a href="<?php echo esc_url(home_url('/')); ?>">
+                        <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo" style="max-width:140px; max-height:36px; width:auto; height:auto;">
+                    </a>
+                <?php else : ?>
+                    <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
+                        <?php bloginfo('name'); ?>
+                    </a>
                 <?php endif; ?>
-            </a>
+            </div>
+
+            <!-- Search Desktop -->
+            <div class="header-search-form">
+                <form method="get" action="<?php echo esc_url(home_url('/')); ?>">
+                    <input type="hidden" name="post_type" value="product" />
+                    <input class="header-search-input" name="s" type="text" placeholder="<?php esc_attr_e('Buscar produtos...', 'storebiz'); ?>"/>
+                    <button class="header-search-button" type="submit">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Icons Desktop -->
+            <div class="d-flex align-items-center gap-7 header-icons-gap">
+                <!-- Conta e Idioma -->
+                <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
+                    <div class="d-flex align-items-center gap-4 account-language-container">
+                        <div class="text-language-wrapper">
+                            <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="text-dark d-flex align-items-center header-link account-link" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                                <i class="fa fa-user fa-lg me-2" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
+                                <span class="d-none d-xl-inline account-text-xl" style="white-space: nowrap; color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                                    <?php echo (!is_user_logged_in()) ? 'Entrar / Cadastrar' : 'Minha Conta'; ?>
+                                </span>
+                                <span class="d-none d-lg-inline d-xl-none account-text-lg" style="white-space: nowrap; color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                                    <?php echo (!is_user_logged_in()) ? 'Entrar / Cadastrar' : 'Minha Conta'; ?>
+                                </span>
+                            </a>
+                            <div class="gtranslate-header">
+                                <?php echo do_shortcode('[gtranslate]'); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (class_exists('WooCommerce') && $storebiz_show_cart == '1') : ?>
+                    <div class="cart-wrapper position-relative">
+                        <a href="<?php echo wc_get_cart_url(); ?>" class="text-dark position-relative">
+                            <i class="fa fa-shopping-cart fa-lg"></i>
+                            <?php $count = WC()->cart->get_cart_contents_count(); ?>
+                            <?php if ($count > 0) : ?>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    <?php echo esc_html($count); ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
+                        <div class="mini-cart-dropdown">
+                            <div class="widget_shopping_cart_content">
+                                <?php woocommerce_mini_cart(); ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Estrutura Mobile -->
+        <div class="d-lg-none position-relative">
+            <!-- Header Mobile com 3 colunas -->
+            <div class="mobile-header-wrapper d-flex align-items-center justify-content-between">
+                <!-- Botão Hamburguer (Esquerda) -->
+                <button id="mobileMenuBtn" class="mobile-menu-btn ms-3" aria-label="Abrir menu">
+                    <span class="mobile-menu-icon">
+                        <span></span><span></span><span></span>
+                    </span>
+                </button>
+
+                <!-- Logo Mobile (Centro) -->
+                <div class="site-branding-mobile text-center">
+                    <?php if (has_custom_logo()) : ?>
+                        <?php 
+                        $custom_logo_id = get_theme_mod('custom_logo');
+                        $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                        ?>
+                        <a href="<?php echo esc_url(home_url('/')); ?>" class="d-inline-block">
+                            <img src="<?php echo esc_url($logo[0]); ?>" alt="<?php bloginfo('name'); ?>" class="custom-logo-mobile" style="max-height: 55px; width: auto;">
+                        </a>
+                    <?php else : ?>
+                        <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none fw-bold fs-4">
+                            <?php bloginfo('name'); ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Ícone de Conta e Idioma (Direita) -->
+                <div class="d-flex align-items-center gap-2 me-3">
+                    <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
+                        <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="mobile-account-link" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                            <i class="fa fa-user fa-lg" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
+                            <span class="mobile-account-text" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                                <?php echo (!is_user_logged_in()) ? 'Entrar' : 'Minha Conta'; ?>
+                            </span>
+                        </a>
+                    <?php endif; ?>
+                    <div class="mobile-gtranslate-header">
+                        <?php echo do_shortcode('[gtranslate]'); ?>
+                    </div>
+                </div>
+            </div>
+            <!-- Menu Offcanvas -->
+            <div id="mobileMenu" class="mobile-offcanvas">
+                <div class="mobile-offcanvas-header d-flex justify-content-between align-items-center">
+                    <span class="fw-bold fs-5">Menu</span>
+                    <button class="mobile-menu-close" aria-label="Fechar menu">&times;</button>
+                </div>
+                <ul class="mobile-menu-list">
+                    <li><a href="<?php echo esc_url(home_url('/')); ?>">Home</a></li>
+                    <li class="mobile-menu-dropdown">
+                        <a href="#" class="dropdown-toggle">Categorias</a>
+                        <ul class="mobile-submenu">
+                        <?php
+                        $orderby = get_theme_mod('shop_categories_order_by', 'name');
+                        $order = get_theme_mod('shop_categories_order_direction', 'ASC');
+                        $manual_order = get_theme_mod('custom_category_order', '');
+                        if ($manual_order) {
+                            $ids = array_map('intval', explode(',', $manual_order));
+                            $product_categories = get_terms([
+                                'taxonomy' => 'product_cat',
+                                'include' => $ids,
+                                'orderby' => 'include',
+                                'hide_empty' => true,
+                                'parent' => 0,
+                            ]);
+                        } else {
+                            $product_categories = get_terms([
+                                'taxonomy' => 'product_cat',
+                                'hide_empty' => true,
+                                'parent' => 0,
+                                'orderby' => $orderby,
+                                'order' => $order
+                            ]);
+                        }
+                        foreach ($product_categories as $cat) {
+                            $category_link = get_term_link($cat->term_id, 'product_cat');
+                            // Buscar subcategorias
+                            $sub_cats = get_terms([
+                                'taxonomy' => 'product_cat',
+                                'hide_empty' => true,
+                                'parent' => $cat->term_id,
+                                'orderby' => 'name',
+                                'order' => 'ASC'
+                            ]);
+                            
+                            if ($sub_cats && !is_wp_error($sub_cats)) {
+                                echo '<li class="mobile-submenu-item">';
+                                echo '<a href="' . esc_url($category_link) . '" class="mobile-submenu-toggle">' . esc_html($cat->name) . ' <span class="arrow">▼</span></a>';
+                                echo '<ul class="mobile-submenu-level-2">';
+                                foreach ($sub_cats as $sub_cat) {
+                                    $sub_category_link = get_term_link($sub_cat->term_id, 'product_cat');
+                                    echo '<li><a href="' . esc_url($sub_category_link) . '">' . esc_html($sub_cat->name) . '</a></li>';
+                                }
+                                echo '</ul>';
+                                echo '</li>';
+                            } else {
+                                echo '<li><a href="' . esc_url($category_link) . '">' . esc_html($cat->name) . '</a></li>';
+                            }
+                        }
+                        ?>
+                        </ul>
+                    </li>
+                    <li><a href="https://www.microware.com.br/quem-somos.html">Quem Somos</a></li>
+                    <li><a href="https://www.microware.com.br/contato.html">Contatos</a></li>
+                </ul>
+            </div>
+            <div id="mobileMenuOverlay" class="mobile-menu-overlay"></div>
         </div>
     </div>
-    <!-- Menu principal -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container-fluid">
+</header>
+
+<!-- Menu principal -->
+<nav class="navbar navbar-expand-lg main-navbar-menu d-none d-lg-block" style="margin-bottom:0; margin-top:0; padding-top:0; padding-bottom:0; border-top:0; box-shadow:none; background:#f8f9fa;">
+    <div class="container">
+        <button class="navbar-toggler d-lg-none mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse mobile-menu" id="mainMenu">
+            <div class="mobile-menu-header d-lg-none">
+                <button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-label="Close"></button>
+            </div>
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo esc_url(home_url('/')); ?>">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="categoriasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle mobile-dropdown-toggle" href="#" id="categoriasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Categorias
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="categoriasDropdown">
+                    <ul class="dropdown-menu mobile-dropdown" aria-labelledby="categoriasDropdown">
                         <?php
-                        $args = array(
-                            'taxonomy'     => 'product_cat',
-                            'orderby'      => 'name',
-                            'show_count'   => 0,
-                            'pad_counts'   => 0,
-                            'hierarchical' => 1,
-                            'title_li'     => '',
-                            'hide_empty'   => 1,
-                            'parent'       => 0
-                        );
-                        $all_categories = get_categories($args);
-                        foreach ($all_categories as $cat) {
+                        // Definindo os termos das categorias uma única vez, com suporte à ordem manual
+                        $orderby = get_theme_mod('shop_categories_order_by', 'name');
+                        $order = get_theme_mod('shop_categories_order_direction', 'ASC');
+                        $manual_order = get_theme_mod('custom_category_order', '');
+                        if ($manual_order) {
+                            $ids = array_map('intval', explode(',', $manual_order));
+                            $product_categories = get_terms([
+                                'taxonomy' => 'product_cat',
+                                'include' => $ids,
+                                'orderby' => 'include',
+                                'hide_empty' => true,
+                                'parent' => 0,
+                            ]);
+                        } else {
+                            $product_categories = get_terms([
+                                'taxonomy' => 'product_cat',
+                                'hide_empty' => true,
+                                'parent' => 0,
+                                'orderby' => $orderby,
+                                'order' => $order
+                            ]);
+                        }
+                        foreach ($product_categories as $cat) {
                             $category_link = get_term_link($cat->term_id, 'product_cat');
-                            $sub_args = array(
-                                'taxonomy'     => 'product_cat',
-                                'child_of'     => $cat->term_id,
-                                'parent'       => $cat->term_id,
-                                'hide_empty'   => 1
-                            );
-                            $sub_cats = get_categories($sub_args);
-                            if ($sub_cats) {
+                            // Buscar subcategorias (ordem padrão por nome)
+                            $sub_cats = get_terms([
+                                'taxonomy' => 'product_cat',
+                                'hide_empty' => true,
+                                'parent' => $cat->term_id,
+                                'orderby' => 'name',
+                                'order' => 'ASC'
+                            ]);
+                            if ($sub_cats && !is_wp_error($sub_cats)) {
                                 echo '<li class="dropdown-submenu position-relative">';
-                                echo '<a class="dropdown-item dropdown-toggle" href="' . esc_url($category_link) . '" data-bs-toggle="dropdown">' . esc_html($cat->name) . '</a>';
+                                echo '<a class="dropdown-item dropdown-toggle" href="' . esc_url($category_link) . '">' . esc_html($cat->name) . '</a>';
                                 echo '<ul class="dropdown-menu">';
                                 foreach ($sub_cats as $sub_cat) {
                                     $sub_category_link = get_term_link($sub_cat->term_id, 'product_cat');
@@ -112,11 +270,16 @@ $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
                 </li>
             </ul>
         </div>
-    </nav>
-</header>
+    </div>
+</nav>
 
 <style>
 /* Estilos para o header */
+.header {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 .site-header {
     position: relative;
     z-index: 1000;
@@ -126,7 +289,10 @@ $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
 
 .custom-logo {
     max-height: 60px;
+    max-width: 300px;
     width: auto;
+    height: auto;
+    object-fit: contain;
 }
 
 .search-form {
@@ -324,7 +490,10 @@ $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
 
     .custom-logo-mobile {
         max-height: 55px;
+        max-width: 200px;
         width: auto;
+        height: auto;
+        object-fit: contain;
         margin: 0 auto;
     }
 
@@ -432,8 +601,8 @@ $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
 
 /* Estilos para o formulário de busca */
 .header-search-form {
-    width: 100%;
-    max-width: 600px;
+    width: 400px;
+    max-width: 400px;
     margin: 0 auto;
 }
 
@@ -522,11 +691,6 @@ $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
         font-size: 0.9rem;
     }
     
-    .header-icons-gap a i {
-        font-size: 1rem;
-        margin-right: 0;
-    }
-    
     /* Ajuste específico para o ícone de usuário em mobile */
     .header-icons-gap a .fa-user {
         font-size: 1.1rem;
@@ -543,39 +707,862 @@ $storebiz_hs_nav_account = get_theme_mod('hs_nav_account','1');
 @media (min-width: 992px) {
     .site-branding {
         margin-right: 0.75rem;
+        min-width: 200px;
+        max-width: 350px;
     }
 
     .header-search-form {
+        position: absolute;
+        left: 45%;
+        transform: translateX(-50%);
+        max-width: 450px;
+        width: 450px;
+        z-index: 2;
+    }
+    .site-header .container {
+        position: relative;
+    }
+}
+
+/* Ajustes específicos para telas médias (notebooks) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .logo-notebook {
+        max-width: 140px !important;
+        max-height: 36px !important;
+        width: auto !important;
+        height: auto !important;
+    }
+    .site-header .site-branding {
+        max-width: 160px !important;
+    }
+    .header-search-form {
+        max-width: 320px;
+        width: 320px;
+    }
+    .header-icons-gap {
+        gap: 0.6rem !important;
+    }
+    .header-icons-gap a {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.85rem;
+    }
+    .header-icons-gap a i {
+        font-size: 1rem;
+    }
+    .account-text-xl,
+    .account-text-lg {
+        font-size: 0.92rem !important;
+    }
+}
+@media (max-width: 991px) {
+    .header-search-form {
+        position: static;
+        transform: none;
+        margin: 1rem auto;
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+/* Estilos para o menu principal */
+.navbar {
+    padding: 0;
+}
+
+.navbar-nav {
+    gap: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    padding: 1rem 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #007bff !important;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -0.5rem;
+    margin-left: 0.5rem;
+}
+
+.dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}
+
+@media (max-width: 991px) {
+    .navbar-nav {
+        gap: 0;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+    }
+    
+    .dropdown-menu {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+    
+    .dropdown-submenu .dropdown-menu {
+        position: static;
+        margin-left: 1rem;
+        margin-top: 0;
+        border-left: 2px solid #e9ecef;
+    }
+}
+
+/* Melhorias visuais para o menu principal */
+.main-navbar-menu {
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    border-top: 0 !important;
+    box-shadow: none !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+.main-navbar-menu .navbar-nav {
+    gap: 1.2rem;
+}
+.main-navbar-menu .nav-link {
+    font-weight: 500;
+    color: #212529 !important;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+    font-size: 1rem;
+}
+.main-navbar-menu .nav-link:hover, .main-navbar-menu .nav-link:focus {
+    background: var(--bs-primary);
+    color: #fff !important;
+    text-decoration: none;
+}
+.main-navbar-menu .dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    margin-top: 0.3rem;
+}
+.main-navbar-menu .dropdown-item {
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    font-size: 0.97rem;
+    color: #212529;
+    transition: background 0.2s, color 0.2s;
+}
+.main-navbar-menu .dropdown-item:hover, .main-navbar-menu .dropdown-item:focus {
+    background: var(--bs-primary);
+    color: #fff;
+}
+.main-navbar-menu .dropdown-submenu {
+    position: relative;
+}
+.main-navbar-menu .dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -0.5rem;
+    margin-left: 0.2rem;
+}
+.main-navbar-menu .dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}
+@media (max-width: 991px) {
+    .main-navbar-menu .navbar-nav {
+        gap: 0;
+    }
+    .main-navbar-menu .nav-link {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+    .main-navbar-menu .dropdown-menu {
+        box-shadow: none;
+        padding: 0;
+    }
+    .main-navbar-menu .dropdown-submenu .dropdown-menu {
+        position: static;
+        margin-left: 1rem;
+        margin-top: 0;
+        border-left: 2px solid #e9ecef;
+    }
+}
+
+@media (min-width: 992px) {
+    .main-navbar-menu .dropdown:hover > .dropdown-menu {
+        display: block;
+    }
+    .main-navbar-menu .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+        left: 100%;
+        top: 0;
+    }
+}
+
+.breadcrumb-alinhado {
+    margin-bottom: 1.5rem;
+    padding-left: 0.5rem; /* ajuste conforme o layout */
+}
+
+/* --- MENU MOBILE NOVO --- */
+@media (max-width: 991px) {
+    .mobile-menu-btn {
+        display: block !important;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        justify-content: center;
+        align-items: center;
+    }
+    .mobile-menu-icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+    }
+    .mobile-menu-icon span {
+        display: block;
+        width: 26px;
+        height: 3px;
+        margin: 4px 0;
+        background: #222;
+        border-radius: 2px;
+        transition: all 0.3s;
+    }
+    .mobile-offcanvas {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: 80vw;
+        max-width: 320px;
+        background: #fff;
+        z-index: 2000;
+        box-shadow: 2px 0 16px rgba(0,0,0,0.08);
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+        padding: 0;
+        overflow-y: auto;
+        height: 100vh;
+    }
+    .mobile-offcanvas.open {
+        transform: translateX(0);
+    }
+    .mobile-menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.25);
+        z-index: 1999;
+    }
+    .mobile-menu-overlay.active {
+        display: block;
+    }
+    .mobile-offcanvas-header {
+        padding: 1.2rem 1.2rem 0.5rem 1.2rem;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+    }
+    .mobile-menu-close {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        line-height: 1;
+        color: #222;
+        cursor: pointer;
+    }
+    .mobile-menu-list {
+        list-style: none;
+        margin: 0;
+        padding: 1rem 0 1rem 0;
+    }
+    .mobile-menu-list > li {
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .mobile-menu-list a {
+        display: block;
+        padding: 0.9rem 1.5rem;
+        color: #222;
+        text-decoration: none;
+        font-size: 1.08rem;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+    .mobile-menu-list a:hover {
+        background: #f8f9fa;
+    }
+    .mobile-menu-dropdown > .dropdown-toggle {
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .mobile-menu-dropdown .arrow {
+        font-size: 1rem;
+        margin-left: 8px;
+        transition: transform 0.3s;
+    }
+    .mobile-menu-dropdown.open .arrow {
+        transform: rotate(180deg);
+    }
+    .mobile-submenu {
+        display: none;
+        list-style: none;
+        padding-left: 1.5rem;
+        background: #fafbfc;
+    }
+    .mobile-menu-dropdown.open .mobile-submenu {
+        display: block;
+    }
+}
+
+/* Ajuste para garantir que o menu desktop fique oculto em mobile */
+@media (max-width: 991px) {
+    .main-navbar-menu {
+        display: none !important;
+    }
+    
+    .navbar-collapse {
+        display: none !important;
+    }
+}
+
+/* Estilos para submenu mobile */
+.mobile-submenu-item {
+    position: relative;
+}
+
+.mobile-submenu-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1.5rem;
+    color: #222;
+    text-decoration: none;
+    font-size: 1.08rem;
+    font-weight: 500;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.mobile-submenu-toggle .arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+}
+
+.mobile-submenu-item.open .mobile-submenu-toggle .arrow {
+    transform: rotate(180deg);
+}
+
+.mobile-submenu-level-2 {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #fff;
+}
+
+.mobile-submenu-item.open .mobile-submenu-level-2 {
+    display: block;
+}
+
+.mobile-submenu-level-2 li a {
+    padding: 0.8rem 2rem;
+    display: block;
+    color: #444;
+    text-decoration: none;
+    font-size: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.mobile-submenu-level-2 li:last-child a {
+    border-bottom: none;
+}
+
+.mobile-submenu-level-2 li a:hover {
+    background: #f8f9fa;
+}
+
+/* Ajustes para o header mobile */
+.mobile-header-wrapper {
+    padding: 0.5rem 0;
+    position: relative;
+    width: 100%;
+    z-index: 10;
+}
+
+.mobile-menu-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    background: none !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+    box-shadow: none !important;
+}
+
+.mobile-menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background: none;
+}
+
+.mobile-menu-icon span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    margin: 2px 0;
+    background: #222;
+    border-radius: 2px;
+    transition: all 0.3s;
+    box-shadow: none;
+}
+
+.site-branding-mobile {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0;
+    z-index: 1;
+}
+
+.mobile-account-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #222;
+    text-decoration: none;
+    font-size: 1rem;
+    z-index: 1200;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.mobile-account-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.mobile-account-link:hover {
+    color: var(--bs-primary);
+    background: rgba(0, 123, 255, 0.05);
+}
+
+@media (max-width: 360px) {
+    .mobile-account-text {
+        display: none;
+    }
+    
+    .mobile-account-link {
+        padding: 0.5rem;
+    }
+}
+
+/* Ajuste para garantir que o logo fique centralizado mesmo com os textos */
+@media (max-width: 991px) {
+    .site-branding-mobile {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        max-width: 220px;
+        min-width: 120px;
+    }
+    
+    .custom-logo-mobile {
+        max-height: 45px;
+        max-width: 200px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+}
+
+/* Reset e ajustes para o botão hamburger */
+.mobile-menu-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    margin-left: 10px;
+    background: none !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+    box-shadow: none !important;
+}
+
+.mobile-menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background: none;
+}
+
+.mobile-menu-icon span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    margin: 2px 0;
+    background: #222;
+    border-radius: 2px;
+    transition: all 0.3s;
+    box-shadow: none;
+}
+
+/* Remover qualquer estilo que possa estar sendo herdado */
+.mobile-menu-btn:focus,
+.mobile-menu-btn:active,
+.mobile-menu-btn:hover {
+    background: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Estrutura Desktop */
+.d-none.d-lg-flex {
+    align-items: center;
+    gap: 1rem;
+}
+
+.site-branding {
+    flex-shrink: 0; /* Impedir que a logo seja comprimida */
+    display: flex;
+    align-items: center;
+}
+
+.site-branding a {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+}
+
+.header-search-form {
+    flex: 1; /* Permitir que o formulário de busca ocupe o espaço disponível */
+    max-width: 600px;
+    margin: 0 2rem;
+}
+
+.header-icons-gap {
+    flex-shrink: 0; /* Impedir que os ícones sejam comprimidos */
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-width: 0;
+}
+
+/* Ajustes responsivos para logos largos */
+@media (min-width: 1200px) {
+    .custom-logo {
+        max-width: 350px; /* Mais espaço em telas grandes */
+    }
+    
+    .site-branding {
+        max-width: 400px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .custom-logo {
+        max-width: 180px !important;
+        max-height: 40px !important;
+    }
+    .site-branding {
+        max-width: 200px !important;
+    }
+    .header-search-form {
+        max-width: 320px;
+        width: 320px;
+    }
+    .header-icons-gap {
+        gap: 0.6rem !important;
+    }
+    .header-icons-gap a {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.85rem;
+    }
+    .header-icons-gap a i {
+        font-size: 1rem;
+    }
+    .account-text-xl,
+    .account-text-lg {
+        font-size: 0.92rem !important;
+    }
+}
+
+@media (max-width: 991px) {
+    .mobile-header-wrapper {
+        padding: 0.5rem 0;
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+    
+    .site-branding-mobile {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+        max-width: 220px;
+        min-width: 120px;
+        flex-shrink: 0;
+    }
+    
+    .mobile-menu-btn {
+        flex-shrink: 0;
         margin-left: 0.5rem;
+    }
+    
+    .mobile-account-link {
+        flex-shrink: 0;
+        margin-right: 0.5rem;
+    }
+}
+
+/* Ajustes específicos para telas muito pequenas */
+@media (max-width: 480px) {
+    .site-branding-mobile {
+        max-width: 180px;
+    }
+    
+    .custom-logo-mobile {
+        max-width: 160px;
+        max-height: 40px;
+    }
+    
+    .mobile-account-text {
+        display: none;
+    }
+}
+
+/* Container de conta e idioma */
+.account-language-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+/* Wrapper para texto e seletor de idiomas */
+.text-language-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+}
+
+/* Estilos para o link de conta */
+.account-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none !important;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.account-link:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+    text-decoration: none !important;
+}
+
+.account-link i {
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* Estilos para o seletor de idiomas GTranslate no Header */
+.gtranslate-header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+.gtranslate-header select {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.9rem;
+    color: #212529;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 110px;
+    max-width: 130px;
+    font-weight: 500;
+}
+
+.gtranslate-header select:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.gtranslate-header select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Estilos para o seletor de idiomas no header mobile */
+.mobile-gtranslate-header {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.mobile-gtranslate-header select {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+    color: #212529;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+    max-width: 100px;
+    position: relative;
+    z-index: 1;
+}
+
+.mobile-gtranslate-header select:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
+}
+
+.mobile-gtranslate-header select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Ajustes específicos para o container mobile */
+@media (max-width: 991px) {
+    .mobile-header-wrapper {
+        position: relative;
+        z-index: 10;
+    }
+    
+    /* Ocultar o seletor do header no mobile */
+    .mobile-gtranslate-header {
+        display: none !important;
+    }
+}
+
+/* GTranslate flutuante no mobile */
+@media screen and (max-width: 768px) {
+    .mobile-gtranslate-header {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        right: auto !important;
+        top: auto !important;
+        z-index: 999999 !important;
+        display: block !important;
+        background: transparent !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+    
+    .mobile-gtranslate-header select {
+        background: #fff !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 6px !important;
+        padding: 8px 12px !important;
+        font-size: 14px !important;
+        min-width: 120px !important;
     }
 }
 </style>
-
 <script>
-jQuery(document).ready(function($) {
-    // Atualizar mini carrinho via AJAX
-    $(document.body).on('added_to_cart removed_from_cart', function() {
-        $('.widget_shopping_cart_content').load(window.wc_cart_fragments_params.wc_ajax_url.toString().replace('%%endpoint%%', 'get_refreshed_fragments'));
+document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('mobileMenuBtn');
+    var menu = document.getElementById('mobileMenu');
+    var overlay = document.getElementById('mobileMenuOverlay');
+    var closeBtn = document.querySelector('.mobile-menu-close');
+    var dropdown = document.querySelector('.mobile-menu-dropdown');
+    var dropdownToggle = dropdown.querySelector('.dropdown-toggle');
+    var submenu = dropdown.querySelector('.mobile-submenu');
+
+    btn.addEventListener('click', function() {
+        menu.classList.add('open');
+        overlay.classList.add('active');
+    });
+    closeBtn.addEventListener('click', function() {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+    overlay.addEventListener('click', function() {
+        menu.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+    dropdownToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        dropdown.classList.toggle('open');
     });
 
-    // Impedir redirecionamento ao clicar no ícone do carrinho no mobile
-    function isMobile() {
-        return window.innerWidth <= 991;
-    }
-    $('.cart-wrapper > a').on('click', function(e) {
-        if (isMobile()) {
+    // Adicionar funcionalidade para submenu mobile
+    var submenuItems = document.querySelectorAll('.mobile-submenu-item');
+    submenuItems.forEach(function(item) {
+        var toggle = item.querySelector('.mobile-submenu-toggle');
+        toggle.addEventListener('click', function(e) {
             e.preventDefault();
-            // Força a abertura do mini-cart
-            $(this).siblings('.mini-cart-dropdown').toggle();
-        }
-    });
-    // Fecha o mini-cart ao clicar fora no mobile
-    $(document).on('click touchstart', function(e) {
-        if (isMobile()) {
-            if (!$(e.target).closest('.cart-wrapper').length) {
-                $('.mini-cart-dropdown').hide();
-            }
-        }
+            e.stopPropagation();
+            item.classList.toggle('open');
+        });
     });
 });
 </script>

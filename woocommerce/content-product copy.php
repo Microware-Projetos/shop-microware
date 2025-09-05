@@ -87,7 +87,7 @@ if ($count > 0) {
 							echo '<div style="width: 100%; height: auto;">' . $svg_content . '</div>';
 						} else {
 							// Fallback caso o SVG não exista
-							$placeholder_image = get_site_url() . '/wp-content/uploads/product_holder.svg';
+							$placeholder_image = get_site_url() . '/wp-content/uploads/product_holder.png';
 							echo '<img src="' . esc_url($placeholder_image) . '" class="wp-post-image rounded-image" alt="' . esc_attr(get_the_title()) . '" />';
 						}
 					}

@@ -263,6 +263,17 @@ if ($_POST && isset($_POST['forgot_password'])) {
 
 
             </div>
+            
+            <!-- Scroll Down Indicator -->
+            <div class="scroll-indicator">
+                <div class="scroll-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 13l5 5 5-5"/>
+                        <path d="M7 6l5 5 5-5"/>
+                    </svg>
+                </div>
+                <span class="scroll-text">Role para baixo</span>
+            </div>
         </div>
     </section>
 
@@ -402,6 +413,34 @@ document.addEventListener('DOMContentLoaded', function() {
     <?php if ($forgot_message): ?>
         showForgotPassword();
     <?php endif; ?>
+    
+    // Scroll Indicator Control
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    
+    if (scrollIndicator) {
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > 100) {
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.pointerEvents = 'none';
+            } else {
+                scrollIndicator.style.opacity = '1';
+                scrollIndicator.style.pointerEvents = 'auto';
+            }
+        });
+        
+        // Smooth scroll ao clicar no indicador
+        scrollIndicator.addEventListener('click', function() {
+            const featuresSection = document.querySelector('.features-section');
+            if (featuresSection) {
+                featuresSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    }
 });
 </script>
 

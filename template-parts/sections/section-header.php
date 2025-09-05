@@ -25,13 +25,6 @@ if (class_exists('WooCommerce')) {
             <!-- Logo Desktop -->
             <div class="site-branding">
                 <div class="logo-container d-flex align-items-center gap-2">
-                    <!-- Logo fixo da Microware -->
-                    <div class="fixed-logo">
-                        <a href="<?php echo esc_url(home_url('/')); ?>">
-                            <img src="<?php echo esc_url(get_site_url() . '/wp-content/uploads/logo-microware.png'); ?>" alt="Microware" class="fixed-logo-img" style="max-height: 40px; width: auto;">
-                        </a>
-                    </div>
-                    
                     <!-- Logo escolhido pelo usuário -->
                     <?php if (has_custom_logo()) : ?>
                         <?php 
@@ -50,6 +43,13 @@ if (class_exists('WooCommerce')) {
                             </a>
                         </div>
                     <?php endif; ?>
+                    
+                    <!-- Logo fixo da Microware -->
+                    <div class="fixed-logo">
+                        <a href="<?php echo esc_url(home_url('/')); ?>">
+                            <img src="<?php echo esc_url(get_site_url() . '/wp-content/uploads/logo-microware.png'); ?>" alt="Microware" class="fixed-logo-img" style="max-height: 40px; width: auto;">
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -68,15 +68,18 @@ if (class_exists('WooCommerce')) {
             <div class="d-flex align-items-center gap-7 header-icons-gap">
                 <!-- Conta -->
                 <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
-                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="text-dark d-flex align-items-center header-link" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
-                        <i class="fa fa-user fa-lg" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
-                        <span class="d-none d-lg-inline" style="white-space: nowrap; color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
-                            <?php echo (!is_user_logged_in()) ? 'olá, faça seu login
-ou cadastre-se' : 'Minha Conta'; ?>
+                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="text-dark d-flex align-items-center header-link account-link" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                        <i class="fa fa-user fa-lg me-2" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
+                        <span class="d-none d-xl-inline account-text-xl" style="white-space: nowrap; color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                            <?php echo (!is_user_logged_in()) ? 'Entrar / Cadastrar' : 'Minha Conta'; ?>
+                        </span>
+                        <span class="d-none d-lg-inline d-xl-none account-text-lg" style="white-space: nowrap; color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                            <?php echo (!is_user_logged_in()) ? 'Entrar / Cadastrar' : 'Minha Conta'; ?>
                         </span>
                     </a>
                 <?php endif; ?>
 
+                <!-- Carrinho -->
                 <?php if (class_exists('WooCommerce') && $storebiz_show_cart == '1') : ?>
                     <div class="cart-wrapper position-relative">
                         <a href="<?php echo wc_get_cart_url(); ?>" class="text-dark position-relative" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
@@ -100,6 +103,11 @@ ou cadastre-se' : 'Minha Conta'; ?>
                         </div>
                     </div>
                 <?php endif; ?>
+
+                <!-- G-Translate -->
+                <div class="gtranslate-header">
+                    <?php echo do_shortcode('[gtranslate]'); ?>
+                </div>
             </div>
         </div>
 
@@ -117,13 +125,6 @@ ou cadastre-se' : 'Minha Conta'; ?>
                 <!-- Logo Mobile (Centro) -->
                 <div class="site-branding-mobile text-center">
                     <div class="logo-container-mobile d-flex align-items-center justify-content-center gap-2">
-                        <!-- Logo fixo da Microware -->
-                        <div class="fixed-logo-mobile">
-                            <a href="<?php echo esc_url(home_url('/')); ?>">
-                                <img src="<?php echo esc_url(get_site_url() . '/wp-content/uploads/logo-microware.png'); ?>" alt="Microware" class="fixed-logo-img-mobile" style="max-height: 35px; width: auto;">
-                            </a>
-                        </div>
-                        
                         <!-- Logo escolhido pelo usuário -->
                         <?php if (has_custom_logo()) : ?>
                             <?php 
@@ -142,16 +143,23 @@ ou cadastre-se' : 'Minha Conta'; ?>
                                 </a>
                             </div>
                         <?php endif; ?>
+                        
+                        <!-- Logo fixo da Microware -->
+                        <div class="fixed-logo-mobile">
+                            <a href="<?php echo esc_url(home_url('/')); ?>">
+                                <img src="<?php echo esc_url(get_site_url() . '/wp-content/uploads/logo-microware.png'); ?>" alt="Microware" class="fixed-logo-img-mobile" style="max-height: 35px; width: auto;">
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Ícones da Direita (Conta + Carrinho) -->
-                <div class="d-flex align-items-center gap-2">
+                <!-- Ícones da Direita (Conta + Carrinho + Idioma) -->
+                <div class="d-flex align-items-center gap-2 me-3">
                     <!-- Ícone de Conta -->
                     <?php if (class_exists('WooCommerce') && $storebiz_hs_nav_account == '1') : ?>
                         <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" class="mobile-account-link" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
                             <i class="fa fa-user fa-lg" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
-                            <span class="mobile-account-text d-none" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
+                            <span class="mobile-account-text" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
                                 <?php echo (!is_user_logged_in()) ? 'Entrar' : 'Minha Conta'; ?>
                             </span>
                         </a>
@@ -174,6 +182,11 @@ ou cadastre-se' : 'Minha Conta'; ?>
                             <?php endif; ?>
                         </a>
                     <?php endif; ?>
+
+                    <!-- G-Translate Mobile -->
+                    <div class="mobile-gtranslate-header">
+                        <?php echo do_shortcode('[gtranslate]'); ?>
+                    </div>
                 </div>
             </div>
             <!-- Menu Offcanvas -->
@@ -694,10 +707,6 @@ ou cadastre-se' : 'Minha Conta'; ?>
 
 .site-branding {
     margin-left: 6rem;
-    max-width: 180px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
 }
 
 .header-icons-gap > * {
@@ -759,10 +768,9 @@ ou cadastre-se' : 'Minha Conta'; ?>
 
 /* Estilos para o formulário de busca */
 .header-search-form {
-    width: 100%;
-    max-width: 600px;
+    width: 400px;
+    max-width: 400px;
     margin: 0 auto;
-    flex: 1 1 0%;
 }
 
 .header-search-form form {
@@ -876,18 +884,50 @@ ou cadastre-se' : 'Minha Conta'; ?>
 @media (min-width: 992px) {
     .site-branding {
         margin-right: 0.75rem;
+        min-width: 200px;
+        max-width: 350px;
     }
 
     .header-search-form {
         position: absolute;
-        left: 50%;
+        left: 45%;
         transform: translateX(-50%);
-        max-width: 600px;
-        width: 100%;
+        max-width: 450px;
+        width: 450px;
         z-index: 2;
     }
     .site-header .container {
         position: relative;
+    }
+}
+/* Ajustes específicos para telas médias (notebooks) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .logo-notebook {
+        max-width: 140px !important;
+        max-height: 36px !important;
+        width: auto !important;
+        height: auto !important;
+    }
+    .site-header .site-branding {
+        max-width: 160px !important;
+    }
+    .header-search-form {
+        max-width: 320px;
+        width: 320px;
+    }
+    .header-icons-gap {
+        gap: 0.6rem !important;
+    }
+    .header-icons-gap a {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.85rem;
+    }
+    .header-icons-gap a i {
+        font-size: 1rem;
+    }
+    .account-text-xl,
+    .account-text-lg {
+        font-size: 0.92rem !important;
     }
 }
 @media (max-width: 991px) {
@@ -1401,6 +1441,138 @@ ou cadastre-se' : 'Minha Conta'; ?>
     background: none !important;
     box-shadow: none !important;
     outline: none !important;
+}
+
+/* Container de conta e idioma - removido pois simplificamos a estrutura */
+
+/* Estilos para o link de conta */
+.account-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none !important;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.account-link:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+    text-decoration: none !important;
+}
+
+.account-link i {
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* Estilos para o seletor de idiomas GTranslate no Header */
+.gtranslate-header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+.gtranslate-header select {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.9rem;
+    color: #212529;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 110px;
+    max-width: 130px;
+    font-weight: 500;
+}
+
+.gtranslate-header select:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.gtranslate-header select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Estilos para o seletor de idiomas no header mobile */
+.mobile-gtranslate-header {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.mobile-gtranslate-header select {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+    color: #212529;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+    max-width: 100px;
+    position: relative;
+    z-index: 1;
+}
+
+.mobile-gtranslate-header select:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
+}
+
+.mobile-gtranslate-header select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Ajustes específicos para o container mobile */
+@media (max-width: 991px) {
+    .mobile-header-wrapper {
+        position: relative;
+        z-index: 10;
+    }
+    
+    /* Ocultar o seletor do header no mobile */
+    .mobile-gtranslate-header {
+        display: none !important;
+    }
+}
+
+/* GTranslate flutuante no mobile */
+@media screen and (max-width: 768px) {
+    .mobile-gtranslate-header {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        right: auto !important;
+        top: auto !important;
+        z-index: 999999 !important;
+        display: block !important;
+        background: transparent !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+    
+    .mobile-gtranslate-header select {
+        background: #fff !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 6px !important;
+        padding: 8px 12px !important;
+        font-size: 14px !important;
+        min-width: 120px !important;
+    }
 }
 </style>
 <script>

@@ -323,5 +323,40 @@ function storebiz_header_settings( $wp_customize ) {
 			)
 		)
 	);
+
+	/*=========================================
+	Banner Personalization
+	=========================================*/
+	$wp_customize->add_section(
+		'banner_personalization',
+		array(
+			'priority'      => 5,
+			'title'         => __('Personalização dos Banners', 'storebiz'),
+			'panel'         => 'header_section',
+		)
+	);
+
+	// Texto do Banner04
+	$wp_customize->add_setting(
+		'banner04_texto',
+		array(
+			'default'           => 'Texto Personalizado',
+			'capability'        => 'edit_theme_options',
+			'sanitize_callback' => 'storebiz_sanitize_text',
+		)
+	);
+
+	$wp_customize->add_control(
+		'banner04_texto',
+		array(
+			'label'       => __('Texto do Banner 4', 'storebiz'),
+			'description' => __('Digite o texto que aparecerá no Banner 4 no lugar do campo cinza', 'storebiz'),
+			'section'     => 'banner_personalization',
+			'type'        => 'text',
+			'input_attrs' => array(
+				'placeholder' => 'Digite seu texto aqui...',
+			),
+		)
+	);
 }
 add_action( 'customize_register', 'storebiz_header_settings' );

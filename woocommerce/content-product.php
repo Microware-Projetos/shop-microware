@@ -69,37 +69,25 @@ if ($count > 0) {
 						// fallback para a imagem destacada
 						the_post_thumbnail('', array('class' => 'rounded-image'));
 					} else {
-						// fallback para a imagem placeholder do WooCommerce, agora usando SVG com logo do cliente
-						$svg_path = WP_CONTENT_DIR . '/uploads/product_holder.svg';
-						if (file_exists($svg_path)) {
-							$svg_content = file_get_contents($svg_path);
-							// Pegue a logo do cliente (exemplo: custom logo do tema)
-							if (has_custom_logo()) {
-								$custom_logo_id = get_theme_mod('custom_logo');
-								$logo = wp_get_attachment_image_src($custom_logo_id, 'full');
-								$logo_cliente_1 = esc_url($logo[0]);
-							} else {
-								$logo_cliente_1 = '';
-							}
-							// Substitui o placeholder no SVG
-							$svg_content = str_replace('{{logo_cliente_1}}', $logo_cliente_1, $svg_content);
-							// Exibe o SVG inline
-							echo '<div class="svg-product-holder-wrapper">' . $svg_content . '</div>';
-							echo '<style>
-							.svg-product-holder-wrapper svg {
-								width: 100% !important;
-								height: auto !important;
-								max-width: 100% !important;
-								max-height: 220px;
-								display: block;
-								margin: 0 auto;
-							}
-							</style>';
-						} else {
-							// Fallback caso o SVG não exista
-							$placeholder_image = get_site_url() . '/wp-content/uploads/product_holder.svg';
-							echo '<img src="' . esc_url($placeholder_image) . '" class="wp-post-image rounded-image" alt="' . esc_attr(get_the_title()) . '" />';
-						}
+						// fallback para a imagem placeholder do WooCommerce
+					
+					  	$placeholder_image = get_site_url() . '/wp-content/themes/storebiz/assets/images/Acessórios.png';
+                        if (has_term('desktop', 'product_cat', $post->ID)) {
+                            $placeholder_image = get_site_url() . '/wp-content/themes/storebiz/assets/images/Desktop.png';
+                        }
+                        if (has_term('notebook', 'product_cat', $post->ID)) {
+                            $placeholder_image = get_site_url() . '/wp-content/themes/storebiz/assets/images/Desktop.png';
+                        }
+                        
+                        if (has_term('Acessórios', 'product_cat', $post->ID)) {
+                            $placeholder_image = get_site_url() . '/wp-content/themes/storebiz/assets/images/Acessórios.png';
+                        }
+                        
+                        if (has_term('Serviço', 'product_cat', $post->ID)) {
+                            $placeholder_image = get_site_url() . '/wp-content/themes/storebiz/assets/images/Serviço.png';
+                        }
+
+						echo '<img src="' . esc_url($placeholder_image) . '" class="wp-post-image rounded-image" alt="' . esc_attr(get_the_title()) . '" />';
 					}
 					?>
 					</a>

@@ -23,15 +23,12 @@
         $order = get_theme_mod('shop_categories_order_direction', 'ASC');
     
         $terms = get_terms([
-            'taxonomy' => 'product_cat',
+            'taxonomy' => 'product_cat', 
             'hide_empty' => true,
             'parent' => 0,
             'orderby' => $orderby,
             'order' => $order
         ]);
-        
-        // Aplica a ordem padrão se não houver configuração manual
-        $terms = aplicar_ordem_padrao_categorias($terms);
     }
 
     echo '<div class="container">';
@@ -123,79 +120,49 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
                                       }
                                   }
                               } else {
-                                // Cria 4 banners usando arquivos SVG diferentes da pasta uploads/banners
-                                for ($i = 1; $i <= 4; $i++) {
-                                    echo '<div class="swiper-slide">';
+                                echo '<div class="swiper-slide">';
 
-                                    $svg_path = WP_CONTENT_DIR . '/uploads/banners/Banner' . sprintf('%02d', $i) . '.svg';
+                                $svg_path = WP_CONTENT_DIR . '/uploads/banner-logos.svg';
+                                
+                                if (file_exists($svg_path)) {
+                                    // Carrega o SVG original com placeholders
+                                    $svg_content = file_get_contents($svg_path);
+                                
+                                    // Substitui as variáveis pelos logos do header (mesma lógica do section-header)
+                                    // Logo fixo da Microware
+                                    $logo_cliente_1 = esc_url(get_site_url() . '/wp-content/uploads/logo-microware.png');
                                     
-                                    if (file_exists($svg_path)) {
-                                        // Carrega o SVG original
-                                        $svg_content = file_get_contents($svg_path);
-                                    
-                                                                                 // Logo escolhido pelo usuário
-                                         if (has_custom_logo()) {
-                                             $custom_logo_id = get_theme_mod('custom_logo');
-                                             $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
-                                             $logo_cliente = esc_url($logo[0]);
-                                             
-                                             // Substitui o rect pelo logo do cliente
-                                             $logo_element = '<image x="57" y="17" width="98" height="66" href="' . $logo_cliente . '" preserveAspectRatio="xMidYMid meet"/>';
-                                             $svg_content = str_replace('<rect id="logo" x="57" y="17" width="98" height="66" fill="white"/>', $logo_element, $svg_content);
-                                         }
-                                         
-                                         // Para o Banner04, substitui o campo de texto
-                                         if ($i == 4) {
-                                             // Texto personalizado para o Banner04
-                                             $texto_personalizado = get_theme_mod('banner04_texto', 'Texto Personalizado');
-                                             
-                                             // Substitui o rect id="texto" por um elemento text com quebra de linha
-                                             // Usa as mesmas coordenadas e dimensões do rect original
-                                             $texto_element = '<text x="56" y="189" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">';
-                                             
-                                             // Quebra o texto em linhas baseado no tamanho do campo (340px de largura)
-                                             $palavras = explode(' ', $texto_personalizado);
-                                             $linhas = [];
-                                             $linha_atual = '';
-                                             $y_offset = 0;
-                                             
-                                             foreach ($palavras as $palavra) {
-                                                 $linha_teste = $linha_atual . ' ' . $palavra;
-                                                 if (strlen($linha_teste) * 10 > 340) { // Aproximação de largura por caractere
-                                                     if (!empty($linha_atual)) {
-                                                         $linhas[] = '<tspan x="56" dy="' . $y_offset . '">' . trim($linha_atual) . '</tspan>';
-                                                         $y_offset = 25; // Espaçamento entre linhas
-                                                         $linha_atual = $palavra;
-                                                     } else {
-                                                         $linhas[] = '<tspan x="56" dy="' . $y_offset . '">' . $palavra . '</tspan>';
-                                                         $y_offset = 25;
-                                                     }
-                                                 } else {
-                                                     $linha_atual = $linha_teste;
-                                                 }
-                                             }
-                                             
-                                             // Adiciona a última linha
-                                             if (!empty($linha_atual)) {
-                                                 $linhas[] = '<tspan x="56" dy="' . $y_offset . '">' . trim($linha_atual) . '</tspan>';
-                                             }
-                                             
-                                             $texto_element .= implode('', $linhas) . '</text>';
-                                             
-                                             // Remove o rect id="texto" e adiciona o texto personalizado
-                                             $svg_content = preg_replace('/<rect id="texto"[^>]*\/>/', $texto_element, $svg_content);
-                                         }
-                                    
-                                        // Imprime o SVG inline (mantém vetorial e responsivo)
-                                        echo '<div style="width: 100%; height: auto;">' . $svg_content . '</div>';
-                                    
+                                    // Logo escolhido pelo usuário
+                                    if (has_custom_logo()) {
+                                        $custom_logo_id = get_theme_mod('custom_logo');
+                                        $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                                        $logo_cliente_2 = esc_url($logo[0]);
                                     } else {
-                                        // Fallback caso o SVG não exista
-                                        echo '<img src="' . esc_url(content_url('uploads/banner-fallback.png')) . '" class="img-fluid w-100" alt="Fallback Banner ' . $i . '">';
+                                        $logo_cliente_2 = ''; // Fallback para texto do site
                                     }
-                                    
-                                    echo '</div>';
+                                
+                                    // Pega os valores do Customizer (ou usa padrão)
+                                    $logo1_x = get_theme_mod('logo1_x', 158);
+                                    $logo2_x = get_theme_mod('logo2_x', 35);
+
+                                    // Substitui os placeholders dos logos (invertidos para manter consistência com o header)
+                                    $svg_content = str_replace('{{logo_cliente_1}}', $logo_cliente_1, $svg_content);
+                                    $svg_content = str_replace('{{logo_cliente_2}}', $logo_cliente_2, $svg_content);
+
+                                    // Substitui as posições X no SVG
+                                    $svg_content = preg_replace('/<image(.*?)x="\\d+"(.*?)y="151"/','<image$1x="' . $logo1_x . '"$2y="151"', $svg_content, 1);
+                                    $svg_content = preg_replace('/<image(.*?)x="\\d+"(.*?)y="150"/','<image$1x="' . $logo2_x . '"$2y="150"', $svg_content, 1);
+                                
+                                    // Imprime o SVG inline (mantém vetorial e responsivo)
+                                    echo '<div style="width: 100%; height: auto;">' . $svg_content . '</div>';
+                                
+                                } else {
+                                    // Fallback caso o SVG não exista
+                                    echo '<img src="' . esc_url(content_url('uploads/banner-fallback.png')) . '" class="img-fluid w-100" alt="Fallback Banner">';
                                 }
+                                
+                                echo '</div>';
+                                
                               }
                             ?>
                               

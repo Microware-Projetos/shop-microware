@@ -249,7 +249,7 @@ add_action('template_redirect', function () {
     $is_admin_user = in_array('administrator', $user->roles);
 
     // Permitir acesso livre para a página /login (ou outra que você definir)
-    $allowed_paths = ['/wp-login.php', '/login'];
+    $allowed_paths = ['/wp-login.php', '/login', "/demo"];
 
     // Se não estiver logado, redireciona para /login (customizada) no site principal
     if (!is_user_logged_in() && !is_admin()) {
@@ -289,9 +289,6 @@ add_action('template_redirect', function () {
         }
     }
 });
-
-
-
 
 add_action('wp_head', function () {
     // Busca o post pelo título "Custom CSS"
@@ -625,7 +622,220 @@ add_action('customize_register', 'customizer_logos_position');
 add_filter('woocommerce_placeholder_img_src', 'custom_placeholder_conditional');
 function custom_placeholder_conditional($image_url) {
     if (is_product()) {
-        return get_stylesheet_directory_uri() . '/assets/images/product_holder.svg';
+        global $post;
+
+        // Se o produto estiver na categoria "desktop"
+        if (has_term('desktop', 'product_cat', $post->ID)) {
+            return get_stylesheet_directory_uri() . '/assets/images/Desktop.png';
+        }
+
+        // Se estiver na categoria "notebook"
+        if (has_term('notebook', 'product_cat', $post->ID)) {
+            return get_stylesheet_directory_uri() . '/assets/images/Desktop.png';
+        }
+
+        // Se estiver na categoria "Acessórios"
+        if (has_term('Acessórios', 'product_cat', $post->ID)) {
+            return get_stylesheet_directory_uri() . '/assets/images/Acessórios.png';
+        }
+
+        // Se estiver na categoria "Acessórios"
+        if (has_term('Serviço', 'product_cat', $post->ID)) {
+            return get_stylesheet_directory_uri() . '/assets/images/Serviço.png';
+        }           
+
+        // Categoria padrão (fallback)
+        return get_stylesheet_directory_uri() . '/assets/images/Acessórios.png';
     }
+
     return $image_url;
 }
+
+
+add_filter('woocommerce_available_payment_gateways', function($gateways) {
+    // Ordem desejada
+    $ordem = [
+        'wc_piggly_pix_gateway',         // PIX
+        'itau-shopline',                 // Itaú Shopline
+        'paypal-brasil-spb-gateway',     // PayPal
+        'cheque'                         // Cheque (opcional)
+    ];
+
+    $novo = [];
+    foreach ($ordem as $id) {
+        if (isset($gateways[$id])) {
+            $novo[$id] = $gateways[$id];
+        }
+    }
+
+    // Adiciona os restantes que não foram listados
+    foreach ($gateways as $id => $gateway) {
+        if (!isset($novo[$id])) {
+            $novo[$id] = $gateway;
+        }
+    }
+
+    return $novo;
+});
+
+// Ordenação padrão das categorias da loja
+add_filter('woocommerce_product_categories', 'ordenar_categorias_padrao', 10, 2);
+function ordenar_categorias_padrao($terms, $args) {
+    // Define a ordem padrão desejada
+    $ordem_padrao = [
+        'Desktop',
+        'Notebook', 
+        'Workstation',
+        'Dockstation',
+        'Display',
+        'Monitor',
+        'Telefonia',
+        'Tablet',
+        'Acessório',
+        'Serviço'
+    ];
+
+    // Se não há termos, retorna vazio
+    if (empty($terms) || is_wp_error($terms)) {
+        return $terms;
+    }
+
+    // Array para armazenar os termos ordenados
+    $termos_ordenados = [];
+
+    // Primeiro, adiciona os termos que estão na lista de ordem padrão
+    foreach ($ordem_padrao as $nome_categoria) {
+        foreach ($terms as $key => $term) {
+            if ($term->name === $nome_categoria) {
+                $termos_ordenados[] = $term;
+                unset($terms[$key]); // Remove para não repetir
+                break;
+            }
+        }
+    }
+
+    // Depois, adiciona os demais termos que não estavam na lista de ordem padrão
+    foreach ($terms as $term) {
+        $termos_ordenados[] = $term;
+    }
+
+    return $termos_ordenados;
+}
+
+// Ordenação padrão para get_terms (usado nos templates)
+add_filter('woocommerce_product_categories_args', 'modificar_args_categorias_padrao');
+function modificar_args_categorias_padrao($args) {
+    // Verifica se não há ordem manual definida
+    $manual_order = get_theme_mod('custom_category_order', '');
+    
+    if (empty($manual_order)) {
+        // Define a ordem padrão desejada
+        $ordem_padrao = [
+            'Desktop',
+            'Notebook', 
+            'Workstation',
+            'Dockstation',
+            'Display',
+            'Monitor',
+            'Telefonia',
+            'Tablet',
+            'Acessório',
+            'Serviço'
+        ];
+
+        // Busca os IDs das categorias na ordem desejada
+        $ids_ordenados = [];
+        foreach ($ordem_padrao as $nome_categoria) {
+            $term = get_term_by('name', $nome_categoria, 'product_cat');
+            if ($term && !is_wp_error($term)) {
+                $ids_ordenados[] = $term->term_id;
+            }
+        }
+
+        // Se encontrou categorias na ordem padrão, usa elas
+        if (!empty($ids_ordenados)) {
+            $args['include'] = $ids_ordenados;
+            $args['orderby'] = 'include';
+            $args['order'] = 'ASC';
+        }
+    }
+
+    return $args;
+}
+
+// Função para definir a ordem padrão das categorias (pode ser chamada no functions.php)
+function definir_ordem_padrao_categorias($ordem_categorias = []) {
+    // Se não foi passada uma ordem, usa a padrão
+    if (empty($ordem_categorias)) {
+        $ordem_categorias = [
+            'Desktop',
+            'Notebook', 
+            'Workstation',
+            'Dockstation',
+            'Display',
+            'Monitor',
+            'Telefonia',
+            'Tablet',
+            'Acessório',
+            'Serviço'
+        ];
+    }
+    
+    // Salva a ordem no tema mod para uso global
+    set_theme_mod('ordem_padrao_categorias', $ordem_categorias);
+}
+
+// Função para obter a ordem padrão das categorias
+function obter_ordem_padrao_categorias() {
+    $ordem_salva = get_theme_mod('ordem_padrao_categorias', []);
+    
+    if (empty($ordem_salva)) {
+        // Retorna a ordem padrão se não houver configuração salva
+        return [
+            'Desktop',
+            'Notebook', 
+            'Workstation',
+            'Dockstation',
+            'Display',
+            'Monitor',
+            'Telefonia',
+            'Tablet',
+            'Acessório',
+            'Serviço'
+        ];
+    }
+    
+    return $ordem_salva;
+}
+
+// Atualiza a função de ordenação para usar a configuração salva
+function aplicar_ordem_padrao_categorias($terms) {
+    if (empty($terms) || is_wp_error($terms)) {
+        return $terms;
+    }
+
+    // Obtém a ordem padrão (salva ou padrão)
+    $ordem_padrao = obter_ordem_padrao_categorias();
+
+    // Array para armazenar os termos ordenados
+    $termos_ordenados = [];
+
+    // Primeiro, adiciona os termos que estão na lista de ordem padrão
+    foreach ($ordem_padrao as $nome_categoria) {
+        foreach ($terms as $key => $term) {
+            if ($term->name === $nome_categoria) {
+                $termos_ordenados[] = $term;
+                unset($terms[$key]); // Remove para não repetir
+                break;
+            }
+        }
+    }
+
+    // Depois, adiciona os demais termos que não estavam na lista de ordem padrão
+    foreach ($terms as $term) {
+        $termos_ordenados[] = $term;
+    }
+
+    return $termos_ordenados;
+}
+
