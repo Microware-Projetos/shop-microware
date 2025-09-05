@@ -82,19 +82,27 @@ if (class_exists('WooCommerce')) {
                 <!-- Carrinho -->
                 <?php if (class_exists('WooCommerce') && $storebiz_show_cart == '1') : ?>
                     <div class="cart-wrapper position-relative">
-                        <a href="<?php echo wc_get_cart_url(); ?>" class="text-dark position-relative" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;">
-                            <i class="fa fa-shopping-cart fa-lg" style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"></i>
-                            <?php 
-                            $count = 0;
-                            if (function_exists('WC') && WC()->cart) {
-                                $count = WC()->cart->get_cart_contents_count();
-                            }
-                            ?>
-                            <?php if ($count > 0) : ?>
-                                <span class="badge bg-danger">
-                                    <?php echo esc_html($count); ?>
-                                </span>
-                            <?php endif; ?>
+                        <a href="<?php echo wc_get_cart_url(); ?>" 
+                           class="cart-link position-relative d-flex align-items-center" 
+                           style="color: <?php echo esc_attr($storebiz_account_link_color); ?> !important;"
+                           aria-label="Ver carrinho de compras"
+                           title="Carrinho de compras">
+                            <div class="cart-icon-container">
+                                <svg class="cart-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7 18C5.9 18 5.01 18.9 5.01 20S5.9 22 7 22 8.99 21.1 8.99 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.25 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.59 17.3 11.97L20.88 5H5.21L4.27 3H1V2ZM17 18C15.9 18 15.01 18.9 15.01 20S15.9 22 17 22 18.99 21.1 18.99 20 18.1 18 17 18Z" fill="currentColor"/>
+                                </svg>
+                                <?php 
+                                $count = 0;
+                                if (function_exists('WC') && WC()->cart) {
+                                    $count = WC()->cart->get_cart_contents_count();
+                                }
+                                ?>
+                                <?php if ($count > 0) : ?>
+                                    <span class="cart-badge">
+                                        <span class="cart-count"><?php echo esc_html($count); ?></span>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
                         </a>
                         <div class="mini-cart-dropdown">
                             <div class="widget_shopping_cart_content">

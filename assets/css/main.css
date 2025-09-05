@@ -1066,6 +1066,145 @@ button.btn-primary:focus {
     border: 2px solid #ffffff;
 }
 
+/* Estilos melhorados para o carrinho */
+.cart-link {
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.cart-link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+}
+
+.cart-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-icon {
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+.cart-link:hover .cart-icon {
+    transform: scale(1.1);
+    animation: cartBounce 0.6s ease-in-out;
+}
+
+@keyframes cartBounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: scale(1.1) translateY(0);
+    }
+    40% {
+        transform: scale(1.1) translateY(-3px);
+    }
+    60% {
+        transform: scale(1.1) translateY(-2px);
+    }
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    border-radius: 50%;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+    border: 2px solid #ffffff;
+    animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+    0% {
+        box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+    }
+    50% {
+        box-shadow: 0 2px 12px rgba(255, 71, 87, 0.5);
+    }
+    100% {
+        box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+    }
+}
+
+.cart-count {
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+}
+
+/* Animação quando o carrinho é atualizado */
+.cart-badge.updated {
+    animation: cartUpdate 0.5s ease-in-out;
+}
+
+@keyframes cartUpdate {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .cart-link {
+        padding: 6px 8px;
+    }
+    
+    .cart-icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .cart-badge {
+        min-width: 18px;
+        height: 18px;
+        top: -6px;
+        right: -6px;
+    }
+    
+    .cart-count {
+        font-size: 10px;
+    }
+}
+
+/* Melhorias de acessibilidade */
+.cart-link:focus {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+}
+
+.cart-link:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Classes para animações JavaScript */
+.cart-icon.hovered {
+    transform: scale(1.05);
+}
+
+.cart-icon.clicked {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
 .shopping-cart {
     position: absolute;
     top: 96%;

@@ -187,6 +187,46 @@
                     t.slideToggle(), a.toggleClass("is-active"), e.preventDefault()
                 })), this.breadcrumbMenuAccessibility()
             }
+        },
+        
+        // Melhorias para o carrinho
+        initCartAnimations: function() {
+            // Animação quando o carrinho é atualizado via AJAX
+            e(document.body).on('updated_wc_div', '.widget_shopping_cart_content', function() {
+                var cartBadge = e('.cart-badge');
+                if (cartBadge.length) {
+                    cartBadge.addClass('updated');
+                    setTimeout(function() {
+                        cartBadge.removeClass('updated');
+                    }, 500);
+                }
+            });
+            
+            // Animação de hover no carrinho
+            e('.cart-link').hover(
+                function() {
+                    e(this).find('.cart-icon').addClass('hovered');
+                },
+                function() {
+                    e(this).find('.cart-icon').removeClass('hovered');
+                }
+            );
+            
+            // Feedback visual ao clicar no carrinho
+            e('.cart-link').on('click', function() {
+                var cartIcon = e(this).find('.cart-icon');
+                cartIcon.addClass('clicked');
+                setTimeout(function() {
+                    cartIcon.removeClass('clicked');
+                }, 200);
+            });
         }
     }).init()
+    
+    // Inicializar animações do carrinho quando o documento estiver pronto
+    jQuery(document).ready(function($) {
+        if (typeof window.storebizCustomize !== 'undefined') {
+            window.storebizCustomize.initCartAnimations();
+        }
+    });
 }(jQuery, window.storebizCustomize);
