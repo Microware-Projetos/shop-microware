@@ -258,8 +258,8 @@ if (class_exists('WooCommerce')) {
                         ?>
                         </ul>
                     </li>
-                    <li><a href="https://www.microware.com.br/quem-somos.html">Quem Somos</a></li>
-                    <li><a href="https://www.microware.com.br/contato.html">Contatos</a></li>
+                    <li><a href="https://www.microware.com.br/quem-somos">Quem Somos</a></li>
+                    <li><a href="https://www.microware.com.br/contato">Contatos</a></li>
                 </ul>
             </div>
             <div id="mobileMenuOverlay" class="mobile-menu-overlay"></div>
