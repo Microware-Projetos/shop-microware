@@ -141,49 +141,49 @@ if ( $storebiz_hs_breadcrumb == '1' && is_shop() && !is_product() && !is_cart() 
                                              
                                              // Substitui o rect pelo logo do cliente
                                              $logo_element = '<image x="57" y="17" width="98" height="66" href="' . $logo_cliente . '" preserveAspectRatio="xMidYMid meet"/>';
-                                             $svg_content = str_replace('<rect id="logo" x="57" y="17" width="98" height="66" fill="white"/>', $logo_element, $svg_content);
+                                             $svg_content = str_replace('<rect id="logo" x="76" y="24" width="108" height="68" fill="url(#pattern1_82_17)"/>', $logo_element, $svg_content);
                                          }
                                          
-                                         // Para o Banner04, substitui o campo de texto
-                                         if ($i == 4) {
-                                             // Texto personalizado para o Banner04
-                                             $texto_personalizado = get_theme_mod('banner04_texto', 'Texto Personalizado');
+                                        // Para o Banner04, substitui o campo de texto
+                                        if ($i == 4) {
+                                            // Texto personalizado para o Banner04
+                                            $texto_personalizado = get_theme_mod('banner04_texto', 'Texto Personalizado');
+                                            
+                                            // Substitui o rect id="texto" por um elemento text com quebra de linha
+                                            // Usa as mesmas coordenadas e dimensões do rect original
+                                            $texto_element = '<style>@import url(\'https://fonts.googleapis.com/css2?family=Gantari:ital,wght@0,100..900;1,100..900&amp;display=swap\');</style><text x="76" y="205" font-family="Gantari, sans-serif" font-size="42" font-weight="700" fill="white">';
                                              
-                                             // Substitui o rect id="texto" por um elemento text com quebra de linha
-                                             // Usa as mesmas coordenadas e dimensões do rect original
-                                             $texto_element = '<text x="56" y="189" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">';
-                                             
-                                             // Quebra o texto em linhas baseado no tamanho do campo (340px de largura)
-                                             $palavras = explode(' ', $texto_personalizado);
-                                             $linhas = [];
-                                             $linha_atual = '';
-                                             $y_offset = 0;
-                                             
-                                             foreach ($palavras as $palavra) {
-                                                 $linha_teste = $linha_atual . ' ' . $palavra;
-                                                 if (strlen($linha_teste) * 10 > 340) { // Aproximação de largura por caractere
-                                                     if (!empty($linha_atual)) {
-                                                         $linhas[] = '<tspan x="56" dy="' . $y_offset . '">' . trim($linha_atual) . '</tspan>';
-                                                         $y_offset = 25; // Espaçamento entre linhas
-                                                         $linha_atual = $palavra;
-                                                     } else {
-                                                         $linhas[] = '<tspan x="56" dy="' . $y_offset . '">' . $palavra . '</tspan>';
-                                                         $y_offset = 25;
-                                                     }
-                                                 } else {
-                                                     $linha_atual = $linha_teste;
-                                                 }
-                                             }
+                                            // Quebra o texto em linhas baseado no tamanho do campo (386px de largura)
+                                            $palavras = explode(' ', $texto_personalizado);
+                                            $linhas = [];
+                                            $linha_atual = '';
+                                            $y_offset = 0;
+                                            
+                                            foreach ($palavras as $palavra) {
+                                                $linha_teste = $linha_atual . ' ' . $palavra;
+                                                if (strlen($linha_teste) * 18 > 386) { // Aproximação de largura por caractere (42px de fonte)
+                                                    if (!empty($linha_atual)) {
+                                                        $linhas[] = '<tspan x="76" dy="' . $y_offset . '">' . trim($linha_atual) . '</tspan>';
+                                                        $y_offset = 50; // Espaçamento entre linhas (proporcional ao tamanho da fonte)
+                                                        $linha_atual = $palavra;
+                                                    } else {
+                                                        $linhas[] = '<tspan x="76" dy="' . $y_offset . '">' . $palavra . '</tspan>';
+                                                        $y_offset = 50;
+                                                    }
+                                                } else {
+                                                    $linha_atual = $linha_teste;
+                                                }
+                                            }
                                              
                                              // Adiciona a última linha
                                              if (!empty($linha_atual)) {
-                                                 $linhas[] = '<tspan x="56" dy="' . $y_offset . '">' . trim($linha_atual) . '</tspan>';
+                                                 $linhas[] = '<tspan x="76" dy="' . $y_offset . '">' . trim($linha_atual) . '</tspan>';
                                              }
                                              
-                                             $texto_element .= implode('', $linhas) . '</text>';
-                                             
-                                             // Remove o rect id="texto" e adiciona o texto personalizado
-                                             $svg_content = preg_replace('/<rect id="texto"[^>]*\/>/', $texto_element, $svg_content);
+                                            $texto_element .= implode('', $linhas) . '</text>';
+                                            
+                                            // Remove o rect id="texto" e adiciona o texto personalizado
+                                            $svg_content = str_replace('<rect id="texto" x="76" y="163" width="386" height="150" fill="black"/>', $texto_element, $svg_content);
                                          }
                                     
                                         // Imprime o SVG inline (mantém vetorial e responsivo)
@@ -755,53 +755,97 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Inicializa o Swiper para produtos em destaque
-    const featuredProductsSlider = new Swiper('.featured-products-slider', {
-        slidesPerView: 2,
-        spaceBetween: 20,
-        loop: true,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.featured-products-slider .swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.featured-products-slider .swiper-button-next',
-            prevEl: '.featured-products-slider .swiper-button-prev',
-        },
-        breakpoints: {
-            768: {
-                slidesPerView: 3,
-                spaceBetween: 20,
+    // Inicializa o Swiper para produtos em destaque - COM PROTEÇÃO ANTI-TRAVAMENTO
+    const featuredSlider = document.querySelector('.featured-products-slider');
+    if (featuredSlider) {
+        const featuredSlidesCount = featuredSlider.querySelectorAll('.swiper-slide').length;
+        const shouldLoopFeatured = featuredSlidesCount > 2;
+        
+        const featuredProductsSlider = new Swiper('.featured-products-slider', {
+            slidesPerView: 2,
+            spaceBetween: 20,
+            loop: shouldLoopFeatured,
+            loopedSlides: shouldLoopFeatured ? featuredSlidesCount : null,
+            autoplay: shouldLoopFeatured ? {
+                delay: 3000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            } : false,
+            pagination: {
+                el: '.featured-products-slider .swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
             },
-            992: {
-                slidesPerView: 4,
-                spaceBetween: 20,
+            navigation: {
+                nextEl: '.featured-products-slider .swiper-button-next',
+                prevEl: '.featured-products-slider .swiper-button-prev',
+            },
+            observer: true,
+            observeParents: true,
+            watchOverflow: true,
+            preventInteractionOnTransition: true,
+            resistanceRatio: 0,
+            speed: 600,
+            breakpoints: {
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                },
+                992: {
+                    slidesPerView: 4,
+                    spaceBetween: 20,
+                }
             }
-        }
-    });
+        });
+    }
 
-    // Inicializa o Swiper para o banner
-    const bannerSlider = new Swiper('.shop-banner-slider', {
-        slidesPerView: 1,
-        spaceBetween: 0,
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.shop-banner-slider .swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.shop-banner-slider .swiper-button-next',
-            prevEl: '.shop-banner-slider .swiper-button-prev',
-        }
-    });
+    // Inicializa o Swiper para o banner - COM PROTEÇÃO ANTI-TRAVAMENTO
+    const bannerSliderEl = document.querySelector('.shop-banner-slider');
+    if (bannerSliderEl) {
+        const bannerSlidesCount = bannerSliderEl.querySelectorAll('.swiper-slide').length;
+        const shouldLoop = bannerSlidesCount > 1;
+        
+        const bannerSlider = new Swiper('.shop-banner-slider', {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: shouldLoop,
+            loopedSlides: shouldLoop ? bannerSlidesCount : null,
+            autoplay: shouldLoop ? {
+                delay: 5000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            } : false,
+            pagination: {
+                el: '.shop-banner-slider .swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
+            },
+            navigation: {
+                nextEl: '.shop-banner-slider .swiper-button-next',
+                prevEl: '.shop-banner-slider .swiper-button-prev',
+            },
+            observer: true,
+            observeParents: true,
+            observeSlideChildren: true,
+            watchOverflow: true,
+            preventInteractionOnTransition: true,
+            resistanceRatio: 0,
+            speed: 600,
+            touchRatio: 1,
+            threshold: 5,
+            on: {
+                init: function() {
+                    setTimeout(() => {
+                        this.update();
+                    }, 100);
+                },
+                slideChange: function() {
+                    // Previne múltiplas transições simultâneas
+                    if (this.animating) return;
+                }
+            }
+        });
+    }
 
     // Adiciona o atributo data-items baseado na quantidade de categorias
     if (categoryList) {

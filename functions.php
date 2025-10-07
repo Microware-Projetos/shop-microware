@@ -631,7 +631,7 @@ function custom_placeholder_conditional($image_url) {
 
         // Se estiver na categoria "notebook"
         if (has_term('notebook', 'product_cat', $post->ID)) {
-            return get_stylesheet_directory_uri() . '/assets/images/Desktop.png';
+            return get_stylesheet_directory_uri() . '/assets/images/Notebook.png';
         }
 
         // Se estiver na categoria "Acessórios"
@@ -688,6 +688,8 @@ function ordenar_categorias_padrao($terms, $args) {
         'Workstation',
         'Dockstation',
         'Display',
+        'Roteador',
+        'Switch',
         'Monitor',
         'Telefonia',
         'Tablet',
@@ -736,6 +738,8 @@ function modificar_args_categorias_padrao($args) {
             'Workstation',
             'Dockstation',
             'Display',
+            'Roteador',
+            'Switch',
             'Monitor',
             'Telefonia',
             'Tablet',
@@ -773,6 +777,8 @@ function definir_ordem_padrao_categorias($ordem_categorias = []) {
             'Workstation',
             'Dockstation',
             'Display',
+            'Roteador',
+            'Switch',
             'Monitor',
             'Telefonia',
             'Tablet',
@@ -797,6 +803,8 @@ function obter_ordem_padrao_categorias() {
             'Workstation',
             'Dockstation',
             'Display',
+            'Roteador',
+            'Switch',
             'Monitor',
             'Telefonia',
             'Tablet',
@@ -839,3 +847,56 @@ function aplicar_ordem_padrao_categorias($terms) {
     return $termos_ordenados;
 }
 
+// Adiciona os campos no Quick Edit
+add_action('woocommerce_product_quick_edit_end', function() {
+    ?>
+    <div class="inline-edit-col">
+        <label>
+            <span class="title">Imagem Externa</span>
+            <span class="input-text-wrap">
+                <input type="text" name="_external_image_url" class="text external_image_url" value="">
+            </span>
+        </label>
+        <label>
+            <span class="title">Galeria Externa (URLs separadas por vírgula)</span>
+            <span class="input-text-wrap">
+                <textarea name="_external_gallery_images" class="external_gallery_images" style="width:100%; height:60px;"></textarea>
+            </span>
+        </label>
+    </div>
+    <?php
+});
+
+// Popula os campos no Quick Edit via JS
+add_action('admin_footer-edit.php', function() {
+    global $typenow;
+    if ($typenow !== 'product') return;
+    ?>
+    <script>
+    jQuery(function($){
+        // Quando abrir o Quick Edit
+        $('body').on('click', '.editinline', function(){
+            var post_id = $(this).closest('tr').attr('id').replace('post-', '');
+            var row = $('#post-' + post_id);
+
+            var externalImage = row.find('.column-external_image_url').text();
+            var externalGallery = row.find('.column-external_gallery_images').text();
+
+            $(':input[name="_external_image_url"]').val(externalImage);
+            $(':input[name="_external_gallery_images"]').val(externalGallery);
+        });
+    });
+    </script>
+    <?php
+});
+
+// Salva os dados ao atualizar no Quick Edit
+add_action('woocommerce_product_quick_edit_save', function($product) {
+    if (isset($_REQUEST['_external_image_url'])) {
+        update_post_meta($product->get_id(), '_external_image_url', sanitize_text_field($_REQUEST['_external_image_url']));
+    }
+    if (isset($_REQUEST['_external_gallery_images'])) {
+        $urls = array_map('trim', explode(',', $_REQUEST['_external_gallery_images']));
+        update_post_meta($product->get_id(), '_external_gallery_images', $urls);
+    }
+});

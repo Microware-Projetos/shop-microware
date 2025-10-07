@@ -179,19 +179,27 @@
 /* Redes sociais no footer */
 .footer-social {
     display: flex;
-    gap: 18px;
+    flex-direction: column;
+    gap: 12px;
     margin-top: 18px;
+}
+
+.social-row {
+    display: flex;
+    justify-content: flex-start;
+    gap: 18px;
 }
 .footer-social a {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: rgba(255,255,255,0.10);
-    border-radius: 8px;
-    transition: background 0.3s;
+    width: 50px;
+    height: 50px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    transition: all 0.3s ease;
     text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 .footer-social a:hover {
     background: #007bff;
@@ -200,6 +208,19 @@
     color: #fff;
     font-size: 22px;
     transition: color 0.3s;
+}
+
+/* Estilos para ícones PNG */
+.footer-social .social-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1); /* Torna os ícones brancos */
+    transition: all 0.3s ease;
+}
+
+.footer-social a:hover .social-icon {
+    filter: brightness(0) invert(1); /* Mantém branco no hover */
+    transform: scale(1.1); /* Aumenta um pouco no hover */
 }
 </style>
 
@@ -211,25 +232,25 @@
                 <div class="footer-column">
                     <div class="footer-logo">
                         <a href="javascript:void(0);">
-                            <img src="https://www.microware.com.br/uploads/2/7/2/6/27264807/editor/logo-microware-borda-branca_3.png" alt="Microware">
+                            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" alt="Microware">
                         </a>
                     </div>
                     <div class="footer-links">
                         <ul>
                             <li>
-                                <a href="https://www.microware.com.br/quem-somos.html" target="_blank" title="Quem Somos">
+                                <a href="https://www.microware.com.br/quem-somos" target="_blank" title="Quem Somos">
                                     <i class="fa fa-users icon"></i>
                                     Quem Somos
                                 </a>
                             </li>
                             <li>
-                                <a href="https://www.microware.com.br/contato.html" target="_blank" title="Contato">
+                                <a href="https://www.microware.com.br/contato" target="_blank" title="Contato">
                                     <i class="fa fa-envelope icon"></i>
                                     Contato
                                 </a>
                             </li>
                             <li>
-                                <a href="https://www.microware.com.br/comunicados.html" target="_blank" title="Comunicados">
+                                <a href="https://www.microware.com.br/comunicados" target="_blank" title="Comunicados">
                                     <i class="fa fa-bullhorn icon"></i>
                                     Comunicados
                                 </a>
@@ -237,14 +258,30 @@
                         </ul>
                     </div>
                     <div class="footer-social">
-                        <a href="https://www.linkedin.com/company/microwarebr/" target="_blank" title="LinkedIn" rel="noopener"><i class="fa fa-linkedin"></i></a>
-                        <a href="https://www.instagram.com/microwarebr/" target="_blank" title="Instagram" rel="noopener"><i class="fa fa-instagram"></i></a>
-                        <a href="https://www.youtube.com/@microwarebr/shorts" target="_blank" title="YouTube" rel="noopener"><i class="fa fa-youtube-play"></i></a>
-                        <a href="https://www.tiktok.com/@microwarebr/" target="_blank" title="TikTok" rel="noopener">
-                            <svg fill="#ffffff" width="22px" height="22px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M412.19,118.66a109.27,109.27,0,0,1-9.45-5.5,132.87,132.87,0,0,1-24.27-20.62c-18.1-20.71-24.86-41.72-27.35-56.43h.1C349.14,23.9,350,16,350.13,16H267.69V334.78c0,4.28,0,8.51-.18,12.69,0,.52-.05,1-.08,1.56,0,.23,0,.47-.05.71,0,.06,0,.12,0,.18a70,70,0,0,1-35.22,55.56,68.8,68.8,0,0,1-34.11,9c-38.41,0-69.54-31.32-69.54-70s31.13-70,69.54-70a68.9,68.9,0,0,1,21.41,3.39l.1-83.94a153.14,153.14,0,0,0-118,34.52,161.79,161.79,0,0,0-35.3,43.53c-3.48,6-16.61,30.11-18.2,69.24-1,22.21,5.67,45.22,8.85,54.73v.2c2,5.6,9.75,24.71,22.38,40.82A167.53,167.53,0,0,0,115,470.66v-.2l.2.2C155.11,497.78,199.36,496,199.36,496c7.66-.31,33.32,0,62.46-13.81,32.32-15.31,50.72-38.12,50.72-38.12a158.46,158.46,0,0,0,27.64-45.93c7.46-19.61,9.95-43.13,9.95-52.53V176.49c1,.6,14.32,9.41,14.32,9.41s19.19,12.3,49.13,20.31c21.48,5.7,50.42,6.9,50.42,6.9V131.27C453.86,132.37,433.27,129.17,412.19,118.66Z"/>
-                            </svg>
-                        </a>
+                        <!-- Primeira linha: 3 ícones -->
+                        <div class="social-row">
+                            <a href="https://www.linkedin.com/company/microwarebr/" target="_blank" title="LinkedIn" rel="noopener">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/icons8-linkedin-50.png" alt="LinkedIn" class="social-icon">
+                            </a>
+                            <a href="https://www.instagram.com/microwarebr/" target="_blank" title="Instagram" rel="noopener">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/icons8-instagram-50.png" alt="Instagram" class="social-icon">
+                            </a>
+                            <a href="https://www.youtube.com/@microwarebr/shorts" target="_blank" title="YouTube" rel="noopener">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/icons8-youtube-50.png" alt="YouTube" class="social-icon">
+                            </a>
+                        </div>
+                        <!-- Segunda linha: 3 ícones -->
+                        <div class="social-row">
+                            <a href="https://www.tiktok.com/@microwarebr/" target="_blank" title="TikTok" rel="noopener">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/icons8-tiktok-50.png" alt="TikTok" class="social-icon">
+                            </a>
+                            <a href="https://wa.me/551148722100?text=Ol%C3%A1%2C%20Microware!" target="_blank" title="WhatsApp" rel="noopener">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/icons8-whatsapp-50.png" alt="WhatsApp" class="social-icon">
+                            </a>
+                            <a href="https://dj-gy304.eu1.hubspotlinks.com/Ctc/JA+113/dj-gy304/VWfBvy1_YK-nW8YNJSM7zwx9bV7Wb0N5sy5v7N2jjSxY3qn9gW8wLKSR6lZ3q4V82d0X8lX2t3W7JWf226jNl74W3zlvcs7TkR27N8D-c9DQvNXNV6qQKc7_x_pjW8y-XY_3tSLGPW7VRC-w801YbMW4lKm-C6Y97MHW3Mqfcx1fSS0_W5YD_gz5PVzzNF1Mwxc9Z6dvW71ss-N4H-jKZW7sz81n6s3Pn5W8Djb2t3MWKM0N8Rns0rfNb99W7_8TfC7FzKgYW8DRT4Y3hn71kW8Kq5Gv7Sh07PW904Pn18049zFW2WHGMq2KBHLDW91vmzY23TC1TW6KL0G-6NX9hgW2WSzF58N90-VV4HXMr3mVvnXV5vmHY1LqHwqW2ShzXx3XbzQnN3-lhb0blkx2W5263H41rgwZ9f7qks4W04" target="_blank" title="Microsoft Teams" rel="noopener">
+                                <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/icons8-teams-50.png" alt="Microsoft Teams" class="social-icon">
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -304,32 +341,32 @@
                     <h4 style="color: #ffffff; margin-bottom: 15px; font-size: 16px;">Nossos Serviços</h4>
                     <ul class="services-list">
                         <li>
-                            <a href="https://www.microware.com.br/transformacao-digital.html" target="_blank" rel="noopener">
+                            <a href="https://www.microware.com.br/transformacao-digital" target="_blank" rel="noopener">
                                 Transformação Digital
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.microware.com.br/nuvem-datacenter-hibrido-conectividade.html" target="_blank" rel="noopener">
+                            <a href="https://www.microware.com.br/nuvem" target="_blank" rel="noopener">
                                 Nuvem, Datacenter e Conectividade
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.microware.com.br/borda-inteligente.html" target="_blank" rel="noopener">
+                            <a href="https://www.microware.com.br/borda-inteligente" target="_blank" rel="noopener">
                                 Borda Inteligente
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.microware.com.br/seguranca.html" target="_blank" rel="noopener">
+                            <a href="https://www.microware.com.br/seguranca" target="_blank" rel="noopener">
                                 Segurança
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.microware.com.br/fornecimento-estrategico-global.html" target="_blank" rel="noopener">
+                            <a href="https://www.microware.com.br/fornecimento-estrategico" target="_blank" rel="noopener">
                                 Fornecimento Estratégico e Global
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.microware.com.br/marketing-digital.html" target="_blank" rel="noopener">
+                            <a href="https://www.microware.com.br/marketing-digital" target="_blank" rel="noopener">
                                 Marketing Digital
                             </a>
                         </li>
