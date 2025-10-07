@@ -337,10 +337,10 @@ if (class_exists('WooCommerce')) {
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://www.microware.com.br/quem-somos.html">Quem Somos</a>
+                    <a class="nav-link" href="https://www.microware.com.br/quem-somos">Quem Somos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://www.microware.com.br/contato.html">Contatos</a>
+                    <a class="nav-link" href="https://www.microware.com.br/contato">Contatos</a>
                 </li>
             </ul>
         </div>
