@@ -1,3 +1,5 @@
+<title>Microware - Loja de Tecnologia Personalizada</title>
+<icon href="<?php echo get_template_directory_uri(); ?>/login/favicon.ico" type="image/x-icon">
 <?php
 // Processamento do login
 $login_error = '';
@@ -239,20 +241,16 @@ if ($_POST && isset($_POST['forgot_password'])) {
 
                 <!-- Right content - Hero Image -->
                 <div>
-                <div class="hero-image-container">
-                    <div class="hero-image-wrapper">
-                        <video 
-                            class="hero-image" 
-                            autoplay 
-                            muted 
-                            loop 
-                            playsinline
-                            style="width: 100%; height: 120%; object-fit: cover; border-radius: inherit;"
-                        >
-                            <source src="<?php echo get_template_directory_uri(); ?>/login/video_webpage_01_handbrake_107.mp4" type="video/mp4">
-                            <!-- Fallback para a imagem caso o vídeo não carregue -->
-                            <img src="<?php echo get_template_directory_uri(); ?>/login/hero-woman.jpg" alt="Mulher usando tecnologia" style="width: 100%; height: 100%; object-fit: cover;">
-                        </video>
+                <div class="hero-image-container" style="width: 120%; max-width: none;">
+                    <div class="hero-image-wrapper" style="width: 100%; aspect-ratio: 16/9; position: relative;">
+                        <iframe 
+                            class="hero-image"
+                            src="https://www.youtube.com/embed/JNLZ-p9ZH5Y?loop=1&playlist=JNLZ-p9ZH5Y&controls=1&showinfo=0&rel=0&modestbranding=1"
+                            frameborder="0"
+                            allow="encrypted-media"
+                            allowfullscreen
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 20px; object-fit: cover;"
+                        ></iframe>
                     </div>
                 </div>
                 <p class="hero-image-text">
